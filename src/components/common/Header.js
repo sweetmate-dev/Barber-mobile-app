@@ -68,7 +68,7 @@ const BarHeader = ({
   style = {},
 }) => {
   return (
-    <HeaderWrapper androidStatusBarColor={Colors.background} style={style}>
+    <HeaderWrapper style={style}>
       <HeaderLeft>
         {hasBack && (
           <BarButton onPress={() => onPressBack()}>

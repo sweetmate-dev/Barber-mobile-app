@@ -14,8 +14,8 @@ const LoginScreen = () => {
   };
 
   const validationSchema = Yup.object().shape({
-    email: Yup.string().required().email().label('Email'),
-    password: Yup.string().required().min(8).label('Password'),
+    email: Yup.string().required().email(),
+    password: Yup.string().required().min(8),
   });
 
   return (
@@ -39,14 +39,14 @@ const LoginScreen = () => {
               onChangeText={handleChange('email')}
               onBlur={handleBlur('email')}
               value={values.email}
-              errorText={submitCount > 0 && errors.email}
+              errorText={submitCount > 0 ? errors.email : ''}
             />
             <BarInput
               label="Password"
               onChangeText={handleChange('password')}
               onBlur={handleBlur('password')}
               value={values.password}
-              errorText={submitCount > 0 && errors.password}
+              errorText={submitCount > 0 ? errors.password : ''}
             />
             <BarButton
               onPress={handleSubmit}

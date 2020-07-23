@@ -57,7 +57,7 @@ export const BarCard = styled(BarView)`
   padding: ${(props) => dySize(props.p || 5)}px;
 `;
 
-export const ABSView = styled.View`
+export const ABSView = styled(BarView)`
   position: absolute;
   top: 0px;
   right: 0px;

@@ -51,7 +51,7 @@ const RegisterScreen = () => {
                 onChangeText={handleChange('firstName')}
                 onBlur={handleBlur('firstName')}
                 value={values.firstName}
-                errorText={submitCount > 0 && errors.firstName}
+                errorText={submitCount > 0 ? errors.firstName : ''}
                 containerStyle={{width: dySize(160)}}
               />
               <BarInput
@@ -59,7 +59,7 @@ const RegisterScreen = () => {
                 onChangeText={handleChange('lastName')}
                 onBlur={handleBlur('lastName')}
                 value={values.lastName}
-                errorText={submitCount > 0 && errors.lastName}
+                errorText={submitCount > 0 ? errors.lastName : ''}
                 containerStyle={{width: dySize(160)}}
               />
             </BarView>
@@ -69,14 +69,14 @@ const RegisterScreen = () => {
               onChangeText={handleChange('email')}
               onBlur={handleBlur('email')}
               value={values.email}
-              errorText={submitCount > 0 && errors.email}
+              errorText={submitCount > 0 ? errors.email : ''}
             />
             <BarInput
               label="Password"
               onChangeText={handleChange('password')}
               onBlur={handleBlur('password')}
               value={values.password}
-              errorText={submitCount > 0 && errors.password}
+              errorText={submitCount > 0 ? errors.password : ''}
               secureTextEntry
             />
             <BarInput
@@ -84,7 +84,7 @@ const RegisterScreen = () => {
               onChangeText={handleChange('confirm')}
               onBlur={handleBlur('confirm')}
               value={values.confirm}
-              errorText={submitCount > 0 && errors.confirm}
+              errorText={submitCount > 0 ? errors.confirm : ''}
               secureTextEntry
             />
             <BarView

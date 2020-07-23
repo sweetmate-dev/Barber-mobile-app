@@ -16,28 +16,29 @@ const Login = ({navigation}) => {
       <ABSView>
         <BarImage image={Welcome} style={{height: '100%', width: '100%'}} />
       </ABSView>
+      <ABSView background={Colors.background} style={{opacity: 0.8}} />
       <BarView mt={70}>
         <BarImage image={Location} resizeMode="contain" />
-        <H3 weight="bold" color={Colors.background}>
-          BARBAPP
-        </H3>
+        <H3 weight="bold">BARBAPP</H3>
       </BarView>
       <BarView>
         <BarButton
-          mb={30}
-          br={25}
-          height={50}
+          mb={20}
+          br={10}
+          height={40}
           width={300}
-          background={Colors.red}
+          background={Colors.outline}
           onPress={() => navigation.navigate('Auth', {initialIndex: 0})}>
-          <H5 weight="bold">LOGIN</H5>
+          <H5 weight="bold" color={Colors.background}>
+            LOGIN
+          </H5>
         </BarButton>
         <BarButton
-          mb={30}
-          br={25}
-          height={50}
+          mb={40}
+          br={10}
+          height={40}
           width={300}
-          background={Colors.gray}
+          background={Colors.red}
           onPress={() => NavigationService.navigate('Auth', {initialIndex: 1})}>
           <H5 weight="bold">REGISTER</H5>
         </BarButton>
