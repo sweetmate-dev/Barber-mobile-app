@@ -7,6 +7,7 @@ import {ABSView} from '../components/styled/View';
 import {Colors} from '../themes';
 import AuthStack from '../containers/auth';
 import TabStack from '../containers/home';
+import BarberProfile from '../containers/others/BarberProfile';
 import NavigationService from './NavigationService';
 
 const Stack = createStackNavigator();
@@ -17,6 +18,7 @@ const RootNavigator = () => {
       <Stack.Navigator headerMode="none">
         <Stack.Screen name="AuthStack" component={AuthStack} />
         <Stack.Screen name="TabStack" component={TabStack} />
+        <Stack.Screen name="BarberProfile" component={BarberProfile} />
       </Stack.Navigator>
       {/* <ABSView>
         <WaveIndicator color={Colors.red} />

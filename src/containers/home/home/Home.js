@@ -1,16 +1,43 @@
 import React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
-import {Icon} from 'native-base';
-import {BarText, H5, BarIcon} from '../../../components/styled/Text';
+import {H5, BarIcon} from '../../../components/styled/Text';
 import {RootView, BarContent, BarView} from '../../../components/styled/View';
 import {BarButton} from '../../../components/styled/Button';
 import {BarHeader, BarImage} from '../../../components/common';
 import {dySize} from '../../../utils/responsive';
-import {Chair, Welcome} from '../../../assets/images';
+import {Welcome, Jacket, Face} from '../../../assets/images';
 import {Colors} from '../../../themes';
 import NavigationService from '../../../navigation/NavigationService';
+import MyBarberItem from './MyBarberItem';
+
+const MyBarbers = [
+  {
+    id: 1,
+    image: Jacket,
+    name: 'Matthew Sadler',
+  },
+  {
+    id: 2,
+    image: Face,
+    name: 'Cintia Yasuo',
+  },
+];
+
+const MyCuts = [
+  {
+    id: 1,
+    image: Jacket,
+  },
+  {
+    id: 2,
+    image: Face,
+  },
+];
 
 const HomeScreen = () => {
+  const onPressAddCut = () => {
+    // open image picker
+  };
   return (
     <RootView justify="flex-start">
       <BarHeader
@@ -20,9 +47,10 @@ const HomeScreen = () => {
         rightIconType="AntDesign"
         rightIcon="bells"
       />
-      <BarContent style={{padding: dySize(10)}}>
+      <BarContent
+        style={{padding: dySize(10)}}
+        contentContainerStyle={{paddingBottom: 100}}>
         <BarImage image={Welcome} width={355} height={250} />
-
         <LinearGradient
           colors={['#00000055', '#000000CC', '#000000FF']}
           style={{
@@ -37,11 +65,35 @@ const HomeScreen = () => {
           <BarImage round image={Welcome} />
           <H5 weight="bold">Tian Li</H5>
         </LinearGradient>
+
         <BarView row justify="space-between" align="center">
           <H5 weight="bold">MY BARBERS</H5>
           <BarButton onPress={() => NavigationService.navigate('TabSearch')}>
             <BarIcon type="AntDesign" name="search1" color={Colors.outline} />
           </BarButton>
+        </BarView>
+
+        <BarView row wrap>
+          {MyBarbers.map((barber) => (
+            <MyBarberItem key={barber.id} user={barber} />
+          ))}
+        </BarView>
+
+        <BarView row justify="space-between" align="center">
+          <H5 weight="bold">MY CUTS</H5>
+          {MyCuts.length > 0 && (
+            <BarButton onPress={onPressAddCut}>
+              <BarIcon type="AntDesign" name="plus" color={Colors.outline} />
+            </BarButton>
+          )}
+        </BarView>
+
+        <BarView row wrap>
+          {MyCuts.map((barber) => (
+            <BarView mr={4} ml={4} key={barber.id}>
+              <BarImage image={barber.image} width={170} height={170} />
+            </BarView>
+          ))}
         </BarView>
       </BarContent>
     </RootView>

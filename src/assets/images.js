@@ -5,3 +5,5 @@ export const Location = require('./images/Location.png');
 export const Welcome = require('./images/welcome.png');
 export const Background1 = require('./images/background_1.jpg');
 export const Chair = require('./images/chair.jpg');
+export const Jacket = require('./images/jacket.jpg');
+export const Face = require('./images/face.jpg');

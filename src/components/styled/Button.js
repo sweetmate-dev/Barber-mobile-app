@@ -7,10 +7,7 @@ export const BarButton = styled(Ripple)`
   border: 1px solid ${Colors.gray};
   border-radius: ${(props) => dySize(props.br || 8)}px;
   border-width: ${(props) => (props.bordered ? 1 : 0)}
-  padding-top: ${(props) => dySize(props.pt || 5)}px;
-  padding-bottom: ${(props) => dySize(props.pb || 5)}px;
-  padding-left: ${(props) => dySize(props.pl || 5)}px;
-  padding-right: ${(props) => dySize(props.pr || 5)}px;
+  padding: ${(props) => dySize(props.padding || 5)}px;
   width: ${(props) => (props.width ? `${dySize(props.width)}px` : 'auto')};
   height: ${(props) => (props.height ? `${dySize(props.height)}px` : 'auto')};
   display: flex;

@@ -54,7 +54,7 @@ const BarHeader = ({
   headerIcon,
   rightText = '',
   rightIcon = '',
-  leftIcon = 'arrow-left',
+  leftIcon = 'ios-arrow-back',
   leftIconSize = 20,
   rightImage,
   rightIconType = 'Ionicons',

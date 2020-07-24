@@ -46,7 +46,7 @@ const AuthScreen = ({route, navigation}) => {
             }}
             renderLabel={({route, focused, color}) => {
               const iconColor = focused ? Colors.outline : Colors.text;
-              return <H5 color={Colors.text}>{route.title}</H5>;
+              return <H5 color={iconColor}>{route.title}</H5>;
             }}
           />
         )}

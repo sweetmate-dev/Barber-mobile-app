@@ -1,14 +1,13 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 
 import {Colors} from '../../themes';
-import {BarInput, BarSwitch} from '../../components/common';
+import {BarInput, BarSwitch, BarActionButton} from '../../components/common';
 import {H5, H6} from '../../components/styled/Text';
-import {BarButton} from '../../components/styled/Button';
 import {RootView, BarView, BarContent} from '../../components/styled/View';
 import {dySize} from '../../utils/responsive';
-import {openUrl, showAlert} from '../../services/operators';
+import {openUrl} from '../../services/operators';
 import NavigationService from '../../navigation/NavigationService';
 
 const RegisterScreen = () => {
@@ -105,16 +104,7 @@ const RegisterScreen = () => {
                 />
               </BarView>
             </BarView>
-            <BarButton
-              onPress={handleSubmit}
-              width={350}
-              br={4}
-              mt={20}
-              background={Colors.outline}>
-              <H5 weight="bold" color={Colors.background}>
-                SIGN UP
-              </H5>
-            </BarButton>
+            <BarActionButton text="SIGN UP" mt={10} onPress={handleSubmit} />
             <BarView row wrap justify="center" mt={20}>
               <H6>By signing up, I agree to the </H6>
               <H6

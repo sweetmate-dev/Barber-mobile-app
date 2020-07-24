@@ -2,10 +2,7 @@ import React from 'react';
 import {View} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import {Colors} from '../../themes';
-import {BarInput} from '../../components/common';
-import {H5} from '../../components/styled/Text';
-import {BarButton} from '../../components/styled/Button';
+import {BarInput, BarActionButton} from '../../components/common';
 import {RootView} from '../../components/styled/View';
 import NavigationService from '../../navigation/NavigationService';
 
@@ -50,16 +47,7 @@ const LoginScreen = () => {
               value={values.password}
               errorText={submitCount > 0 ? errors.password : ''}
             />
-            <BarButton
-              onPress={handleSubmit}
-              width={350}
-              br={4}
-              mt={20}
-              background={Colors.outline}>
-              <H5 weight="bold" color={Colors.background}>
-                LOG IN
-              </H5>
-            </BarButton>
+            <BarActionButton text="LOG IN" mt={10} onPress={handleSubmit} />
           </View>
         )}
       />
