@@ -7,10 +7,12 @@ import {BarInput} from '../../components/common';
 import {H5} from '../../components/styled/Text';
 import {BarButton} from '../../components/styled/Button';
 import {RootView} from '../../components/styled/View';
+import NavigationService from '../../navigation/NavigationService';
 
 const LoginScreen = () => {
   login = (values) => {
     console.log({values});
+    NavigationService.navigate('TabStack');
   };
 
   const validationSchema = Yup.object().shape({
@@ -19,10 +21,10 @@ const LoginScreen = () => {
   });
 
   return (
-    <RootView justify="flex-start" align="center">
+    <RootView justify="flex-start" align="center" background="transparent">
       <Formik
         validationSchema={validationSchema}
-        initialValues={{email: '', password: ''}}
+        initialValues={{email: 'a@a.com', password: '1234565789'}}
         onSubmit={(values) => login(values)}
         render={({
           handleChange,

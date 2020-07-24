@@ -6,7 +6,8 @@ import RegisterScreen from './Register';
 import {Colors} from '../../themes';
 import {BarImage, BarHeader} from '../../components/common';
 import {H5} from '../../components/styled/Text';
-import {AppLogo} from '../../assets/images';
+import {ABSView} from '../../components/styled/View';
+import {AppLogo, Background1} from '../../assets/images';
 
 const AuthScreen = ({route, navigation}) => {
   const {initialIndex} = route.params;
@@ -18,6 +19,10 @@ const AuthScreen = ({route, navigation}) => {
 
   return (
     <View style={{flex: 1, backgroundColor: Colors.background}}>
+      <ABSView>
+        <BarImage image={Background1} style={{height: '100%', width: '100%'}} />
+      </ABSView>
+      <ABSView background={Colors.background} style={{opacity: 0.9}} />
       <BarHeader
         title={<BarImage image={AppLogo} width={240} height={70} />}
         leftIcon="ios-arrow-back"

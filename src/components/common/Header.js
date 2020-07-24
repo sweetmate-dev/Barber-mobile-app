@@ -1,13 +1,11 @@
 import React from 'react';
-import {StatusBar} from 'react-native';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {Header, Left, Body, Right, Icon} from 'native-base';
-import {Colors, FontSize} from '../../themes';
-import {H3, H4, H5} from '../styled/Text';
+import {Colors} from '../../themes';
+import {H4, H5} from '../styled/Text';
 import {BarView} from '../styled/View';
 import {BarButton} from '../styled/Button';
-import BarImage from './BarImage';
 import NavigationService from '../../navigation/NavigationService';
 import {dySize} from '../../utils/responsive';
 
@@ -75,7 +73,7 @@ const BarHeader = ({
             <Icon
               type={leftIconType}
               name={leftIcon}
-              style={{fontSize: leftIconSize, color: 'white'}}
+              style={{fontSize: leftIconSize, color: Colors.outline}}
             />
             {hasLeftBadge && (
               <BarView
@@ -104,8 +102,7 @@ const BarHeader = ({
             <Icon
               type={rightIconType}
               name={rightIcon}
-              size={rightIconSize}
-              color={rightIconColor || Colors.text}
+              style={{fontSize: rightIconSize, color: Colors.outline}}
             />
           )}
           {hasRight && rightImage && rightImage}

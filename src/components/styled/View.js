@@ -47,6 +47,7 @@ export const BarView = styled.View`
   overflow: ${(props) => props.overflow || 'hidden'};
   background-color: ${(props) => props.background || 'transparent'};
   position: ${(props) => (props.absolute ? 'absolute' : 'relative')};
+  opacity: ${(props) => props.opacity || 1};
 `;
 
 export const BarCard = styled(BarView)`

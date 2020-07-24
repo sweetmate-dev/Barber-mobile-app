@@ -9,11 +9,13 @@ import {BarButton} from '../../components/styled/Button';
 import {RootView, BarView, BarContent} from '../../components/styled/View';
 import {dySize} from '../../utils/responsive';
 import {openUrl, showAlert} from '../../services/operators';
+import NavigationService from '../../navigation/NavigationService';
 
 const RegisterScreen = () => {
   const [barber, setBarber] = useState(false);
   register = (values) => {
-    alert(JSON.stringify(values));
+    console.log({values});
+    NavigationService.navigate('TabStack');
   };
 
   const validationSchema = Yup.object().shape({
@@ -31,7 +33,7 @@ const RegisterScreen = () => {
   });
 
   return (
-    <RootView justify="flex-start" align="center">
+    <RootView justify="flex-start" align="center" background="transparent">
       <Formik
         validationSchema={validationSchema}
         initialValues={{email: '', password: ''}}

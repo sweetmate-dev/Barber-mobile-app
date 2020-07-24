@@ -19,6 +19,13 @@ export const BarText = styled.Text`
   width: ${(props) => (props.width ? `${dySize(props.width)}px` : 'auto')};
 `;
 
+export const BarIcon = styled(Icon)`
+  font-size: ${(props) => dySize(props.size || 20)}px;
+  color: ${(props) => props.color || Colors.text};
+  margin: ${(props) => dySize(props.margin || 5)}px;
+  text-align: ${(props) => props.align || 'left'};
+`;
+
 export const H1 = styled(BarText)`
   font-size: ${dySize(FontSize.FONT_SIZE_MASSIVE)}px;
 `;
