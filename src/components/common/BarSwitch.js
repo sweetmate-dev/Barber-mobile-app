@@ -1,6 +1,7 @@
 import React from 'react';
 import {Switch} from 'react-native-switch';
 import {Colors} from '../../themes';
+import {H6, BarIcon} from '../styled/Text';
 
 const BarSwitch = ({
   value,
@@ -11,15 +12,28 @@ const BarSwitch = ({
   return (
     <Switch
       value={value}
-      activeText={activeText}
+      activeText={
+        <H6 color={Colors.background} weight="bold">
+          {activeText}
+        </H6>
+      }
       inActiveText={inActiveText}
       circleSize={26}
       barHeight={30}
       circleBorderWidth={0}
       changeValueImmediately={false}
-      backgroundActive={Colors.success}
-      backgroundInactive={Colors.gray}
-      circleActiveColor={Colors.text}
+      backgroundActive={Colors.outline}
+      backgroundInactive={Colors.card}
+      circleActiveColor={'#000000BB'}
+      renderInsideCircle={() => (
+        <BarIcon
+          type="AntDesign"
+          color={value ? Colors.text : Colors.placeholder}
+          name={value ? 'check' : 'close'}
+          margin={1}
+          size={16}
+        />
+      )}
       circleInActiveColor={Colors.text}
       outerCircleStyle={{alignItems: 'center', justifyContent: 'center'}}
       switchLeftPx={10} // denominator for logic when sliding to TRUE position. Higher number = more space from RIGHT of the circle to END of the slider

@@ -8,6 +8,7 @@ import NavigationService from '../../../navigation/NavigationService';
 import {FlatList} from 'react-native-gesture-handler';
 import {H5, H6} from '../../../components/styled/Text';
 import {BarButton} from '../../../components/styled/Button';
+import BarberItem from '../../barber/components/BarberItem';
 
 FilteredBarbers = [
   {
@@ -60,29 +61,7 @@ const SearchScreen = () => {
   };
 
   _renderBarberItem = ({item}) => {
-    const user = item;
-    return (
-      <BarButton
-        background={Colors.card}
-        onPress={() => onPressUser(user)}
-        height={80}
-        row
-        align="center"
-        justify="flex-start"
-        br={4}
-        mb={5}>
-        <BarImage image={{uri: user.avatar}} width={60} height={60} round />
-        <BarView ml={10}>
-          <H5 pv={2}>{user.name}</H5>
-          <H6 pv={2} color={Colors.placeholder}>
-            {user.title}
-          </H6>
-          <H6 pv={2} color={Colors.placeholder}>
-            {user.location}
-          </H6>
-        </BarView>
-      </BarButton>
-    );
+    return <BarberItem user={item} onPress={() => onPressUser(item)} />;
   };
 
   return (

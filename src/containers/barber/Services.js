@@ -3,6 +3,8 @@ import {H5, H6} from '../../components/styled/Text';
 import {RootView, BarContent, BarView} from '../../components/styled/View';
 import {Colors} from '../../themes';
 import {dySize} from '../../utils/responsive';
+import {BarButton} from '../../components/styled/Button';
+import NavigationService from '../../navigation/NavigationService';
 
 const SERVICES = [
   {
@@ -66,6 +68,12 @@ const SERVICES = [
   },
 ];
 const BarberServiceScreen = () => {
+  const onSelectService = (service) => {
+    NavigationService.navigate('Booking', {
+      services: SERVICES,
+      selected: [service.id],
+    });
+  };
   return (
     <RootView align="flex-start">
       <H6 weight="bold" ml={10}>
@@ -73,21 +81,25 @@ const BarberServiceScreen = () => {
       </H6>
       <BarContent contentContainerStyle={{padding: dySize(10)}}>
         {SERVICES.map((service) => (
-          <BarView
+          <BarButton
             row
+            onPress={() => onSelectService(service)}
             justify="space-between"
+            align="flex-start"
             background={Colors.card}
             mb={2}
-            ph={10}>
-            <BarView style={{flex: 1}}>
+            br={2}>
+            <BarView style={{flex: 1}} ph={10}>
               <H5 weight="bold">{service.name}</H5>
               <H6 color={Colors.placeholder} pv={1}>
                 {service.duration} minutes
               </H6>
               <H6>{service.description}</H6>
             </BarView>
-            <H5 color={Colors.outline}>${service.price}</H5>
-          </BarView>
+            <H5 color={Colors.outline} mr={10}>
+              ${service.price}
+            </H5>
+          </BarButton>
         ))}
       </BarContent>
     </RootView>
