@@ -4,6 +4,8 @@ import BarInput from './BarInput';
 import BarSwitch from './BarSwitch';
 import BarSearchInput from './BarSearchInput';
 import BarActionButton from './BarActionButton';
+import BarItemButton from './BarItemButton';
+import BarIconButton from './BarIconButton';
 
 export {
   BarHeader,
@@ -12,4 +14,6 @@ export {
   BarSwitch,
   BarSearchInput,
   BarActionButton,
+  BarItemButton,
+  BarIconButton,
 };

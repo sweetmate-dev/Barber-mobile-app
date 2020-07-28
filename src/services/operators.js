@@ -1,29 +1,37 @@
 import {Linking} from 'react-native';
-import Toast from 'react-native-root-toast';
+import Toast from 'react-native-tiny-toast';
+import {Loading2} from '../assets/images';
+
+let myToast;
 
 export const showAlert = (text) => {
   Toast.show(text, {
-    duration: Toast.durations.SHORT,
-    position: -50,
-    backgroundColor: '#E2E2E2',
-    textColor: 'black',
-    shadow: true,
-    animation: true,
-    hideOnPress: true,
-    delay: 0,
-    onShow: () => {
-      // calls on toast\`s appear animation start
+    duration: 2000,
+    position: Toast.position.center,
+    containerStyle: {
+      backgroundColor: '#E2E2E2',
     },
-    onShown: () => {
-      // calls on toast\`s appear animation end.
-    },
-    onHide: () => {
-      // calls on toast\`s hide animation start.
-    },
-    onHidden: () => {
-      // calls on toast\`s hide animation end.
+    textStyle: {
+      color: 'black',
     },
   });
+};
+
+export const showLoading = (text) => {
+  myToast = Toast.showLoading(text, {
+    containerStyle: {
+      backgroundColor: '#E2E2E2',
+    },
+    imgSource: Loading2,
+    loading: false,
+    textStyle: {
+      color: 'black',
+    },
+  });
+};
+
+export const hideLoading = () => {
+  Toast.hide(myToast);
 };
 
 // Validates email input
@@ -60,4 +68,11 @@ export const openUrl = (url) => {
       showAlert("Don't know how to open URI: " + url);
     }
   });
+};
+
+export const getTimeFormat = (num) => {
+  const h = Math.floor(num);
+  const m = (num - Math.floor(num)) * 60;
+  const a = num > 11 ? 'PM' : 'AM';
+  return `${num < 10 ? '0' : ''}${h}:${m < 10 ? '0' : ''}${m} ${a}`;
 };

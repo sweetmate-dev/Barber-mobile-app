@@ -1,20 +1,25 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-
+import {Auth} from 'aws-amplify';
 import {Colors} from '../../themes';
 import {BarInput, BarSwitch, BarActionButton} from '../../components/common';
 import {H5, H6} from '../../components/styled/Text';
 import {RootView, BarView, BarContent} from '../../components/styled/View';
 import {dySize} from '../../utils/responsive';
-import {openUrl} from '../../services/operators';
-import NavigationService from '../../navigation/NavigationService';
+import {openUrl, showAlert} from '../../services/operators';
+import {Context as AuthContext} from '../../context/authContext';
 
 const RegisterScreen = () => {
+  const {signUp} = useContext(AuthContext);
   const [barber, setBarber] = useState(false);
   register = (values) => {
     console.log({values});
-    NavigationService.navigate('TabStack');
+    // NavigationService.navigate('TabStack');
+    signUp({
+      username: values.email,
+      password: values.password,
+    });
   };
 
   const validationSchema = Yup.object().shape({
@@ -35,7 +40,13 @@ const RegisterScreen = () => {
     <RootView justify="flex-start" align="center" background="transparent">
       <Formik
         validationSchema={validationSchema}
-        initialValues={{email: '', password: ''}}
+        initialValues={{
+          firstName: 'Tian',
+          lastName: 'Li',
+          email: 'litiyan2015@gmail.com',
+          password: 'Test1234',
+          confirm: 'Test1234',
+        }}
         onSubmit={(values) => register(values)}
         render={({
           handleChange,

@@ -1,38 +1,18 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import {useQuery} from '@apollo/react-hooks';
+import {WaveIndicator} from 'react-native-indicators';
+
 import {RootView, BarView, BarContent} from '../../../components/styled/View';
-import {BarSearchInput, BarImage} from '../../../components/common';
+import {BarSearchInput} from '../../../components/common';
 import {Header} from 'native-base';
 import {dySize} from '../../../utils/responsive';
 import {Colors} from '../../../themes';
 import NavigationService from '../../../navigation/NavigationService';
 import {FlatList} from 'react-native-gesture-handler';
-import {H5, H6} from '../../../components/styled/Text';
-import {BarButton} from '../../../components/styled/Button';
 import BarberItem from '../../barber/components/BarberItem';
-
-FilteredBarbers = [
-  {
-    id: 1,
-    avatar: 'https://homepages.cae.wisc.edu/~ece533/images/airplane.png',
-    name: 'Matthew Sadler',
-    title: 'Senior Barber',
-    location: 'Aurora, CO, United States',
-  },
-  {
-    id: 2,
-    avatar: 'https://homepages.cae.wisc.edu/~ece533/images/baboon.png',
-    name: 'John Amuesi',
-    title: 'Advanced Barber',
-    location: 'London, United Kindom',
-  },
-  {
-    id: 3,
-    avatar: 'https://homepages.cae.wisc.edu/~ece533/images/fruits.png',
-    name: 'Tian Li',
-    title: 'Junior Barber',
-    location: 'Shenyang, China',
-  },
-];
+import {GET_BARBERS} from '../../../graphql/query';
+import {BarIcon, H6} from '../../../components/styled/Text';
+import {showAlert} from '../../../services/operators';
 
 const SearchScreen = () => {
   const [searchInput, setSearchInput] = useState(null);
@@ -61,8 +41,16 @@ const SearchScreen = () => {
   };
 
   _renderBarberItem = ({item}) => {
-    return <BarberItem user={item} onPress={() => onPressUser(item)} />;
+    return (
+      <BarberItem key={item.id} user={item} onPress={() => onPressUser(item)} />
+    );
   };
+
+  const {loading, error, data} = useQuery(GET_BARBERS, {
+    pollInterval: 500,
+  });
+  console.log({loading, data, error});
+  if (error) showAlert(error);
 
   return (
     <RootView justify="flex-start" align="flex-start">
@@ -72,6 +60,7 @@ const SearchScreen = () => {
           height: 45,
           backgroundColor: Colors.background,
           justifyContent: 'center',
+          borderBottomWidth: 0,
         }}>
         <BarView width={355}>
           <BarSearchInput
@@ -84,11 +73,22 @@ const SearchScreen = () => {
         </BarView>
       </Header>
       <BarContent contentContainerStyle={{padding: dySize(10)}}>
-        <FlatList
-          data={FilteredBarbers}
-          renderItem={_renderBarberItem}
-          keyExtractor={(item) => item.id}
-        />
+        {loading ? (
+          <BarView justify="center" align="center">
+            <WaveIndicator color={Colors.text} />
+          </BarView>
+        ) : (
+          <FlatList
+            data={data.barber}
+            ListEmptyComponent={
+              <H6 color={Colors.placeholder} align="center">
+                Can't find any barber
+              </H6>
+            }
+            renderItem={_renderBarberItem}
+            keyExtractor={(item) => item.id}
+          />
+        )}
       </BarContent>
     </RootView>
   );

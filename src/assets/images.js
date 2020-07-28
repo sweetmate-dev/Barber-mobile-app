@@ -7,3 +7,5 @@ export const Background1 = require('./images/background_1.jpg');
 export const Chair = require('./images/chair.jpg');
 export const Jacket = require('./images/jacket.jpg');
 export const Face = require('./images/face.jpg');
+export const Loading2 = require('./images/loading2.gif');
+export const Loading5 = require('./images/loading5.gif');

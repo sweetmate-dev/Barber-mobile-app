@@ -3,7 +3,12 @@ import {BarButton} from '../styled/Button';
 import {Colors} from '../../themes';
 import {H5} from '../styled/Text';
 
-const BarActionButton = ({text, width = 350, ...props}) => {
+const BarActionButton = ({
+  text,
+  textColor = Colors.background,
+  width = 350,
+  ...props
+}) => {
   return (
     <BarButton
       width={width}
@@ -11,7 +16,7 @@ const BarActionButton = ({text, width = 350, ...props}) => {
       mt={20}
       background={Colors.outline}
       {...props}>
-      <H5 weight="bold" color={Colors.background}>
+      <H5 weight="bold" color={textColor}>
         {text}
       </H5>
     </BarButton>

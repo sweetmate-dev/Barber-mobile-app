@@ -1,15 +1,19 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {BarInput, BarActionButton} from '../../components/common';
 import {RootView} from '../../components/styled/View';
 import NavigationService from '../../navigation/NavigationService';
+import {Context as AuthContext} from '../../context/authContext';
 
 const LoginScreen = () => {
+  const {signIn} = useContext(AuthContext);
   login = (values) => {
-    console.log({values});
-    NavigationService.navigate('TabStack');
+    signIn({
+      username: values.email,
+      password: values.password,
+    });
   };
 
   const validationSchema = Yup.object().shape({
@@ -21,7 +25,10 @@ const LoginScreen = () => {
     <RootView justify="flex-start" align="center" background="transparent">
       <Formik
         validationSchema={validationSchema}
-        initialValues={{email: 'a@a.com', password: '1234565789'}}
+        initialValues={{
+          email: 'litiyan2015@gmail.com',
+          password: 'Test1234',
+        }}
         onSubmit={(values) => login(values)}
         render={({
           handleChange,
@@ -46,6 +53,7 @@ const LoginScreen = () => {
               onBlur={handleBlur('password')}
               value={values.password}
               errorText={submitCount > 0 ? errors.password : ''}
+              secureTextEntry
             />
             <BarActionButton text="LOG IN" mt={10} onPress={handleSubmit} />
           </View>

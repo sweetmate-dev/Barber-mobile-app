@@ -6,10 +6,11 @@ import {dySize} from '../../utils/responsive';
 import BarberItem from '../barber/components/BarberItem';
 import {Colors} from '../../themes';
 import {H6, H5, BarIcon} from '../../components/styled/Text';
-import {showAlert} from '../../services/operators';
+import {showAlert, getTimeFormat} from '../../services/operators';
 import {BarButton} from '../../components/styled/Button';
 import moment from 'moment';
 import BookAdditionalInformation from '../barber/components/BookAdditionalInformation';
+import NavigationService from '../../navigation/NavigationService';
 
 const USER = {
   id: 1,
@@ -35,6 +36,7 @@ const Booking = ({route}) => {
   const [selected, setSelected] = useState(route.params.selected || []); // selected service ids
   const [sum, setSum] = useState(0);
   const [bookDate, setBookDate] = useState(null);
+  const [bookTime, setBookTime] = useState(null);
   const [payMethod, setPayMethod] = useState('shop');
 
   useEffect(() => {
@@ -58,14 +60,26 @@ const Booking = ({route}) => {
   };
 
   gotoBookingCalendar = () => {
-    console.log('going to booking calendar');
+    NavigationService.navigate('BookingDate', {
+      bookDate,
+      bookTime,
+      onSelectBookingDate,
+    });
+  };
+
+  onSelectBookingDate = (date, time) => {
+    console.log({date});
+    if (date) {
+      setBookDate(date);
+      setBookTime(time);
+    }
   };
 
   onPressBook = () => {
     if (selected.length === 0)
       showAlert('You must select one service at least');
-    else if (errorInfo.length > 0) showAlert(errorInfo[0]);
     else if (!bookDate) showAlert('You must select booking data');
+    else if (errorInfo.length > 0) showAlert(errorInfo[0]);
   };
 
   return (
@@ -147,8 +161,8 @@ const Booking = ({route}) => {
           onPress={gotoBookingCalendar}
           background={Colors.card}
           justify="space-between">
-          {bookDate && <H5>{moment(bookDate).format('YYYY-MM-DD hh:mm A')}</H5>}
-          {bookDate || <H5 color={Colors.placeholder}>Select</H5>}
+          {bookDate && <H5>{`${bookDate}    ${getTimeFormat(bookTime)}`}</H5>}
+          {!bookDate && <H5 color={Colors.placeholder}>Select</H5>}
           <BarIcon type="AntDesign" name="right" color={Colors.placeholder} />
         </BarButton>
 

@@ -7,7 +7,7 @@ import {RootView, BarView, BarContent} from '../../components/styled/View';
 import {BarButton} from '../../components/styled/Button';
 import {Colors} from '../../themes';
 import {dySize} from '../../utils/responsive';
-import {BarImage} from '../../components/common';
+import {BarImage, BarIconButton} from '../../components/common';
 
 const BarberProfileActions = [
   {action: 'book', icon: 'calendar'},
@@ -40,6 +40,7 @@ const BarberInfoScreen = ({barber}) => {
   callBarber = () => {};
 
   chatBarber = () => {};
+  console.log(barber.phone);
 
   return (
     <RootView justify="flex-start" align="flex-start">
@@ -79,36 +80,13 @@ const BarberInfoScreen = ({barber}) => {
             size={15}
             color={Colors.outline}
           />
-          <H6 style={{flex: 1}}>+86 131 2413 5490</H6>
-          <BarButton
-            background={Colors.outline}
-            onPress={callBarber}
-            width={30}
-            height={30}
-            br={30}
-            padding={1}>
-            <BarIcon
-              type="AntDesign"
-              name="phone"
-              size={15}
-              color={Colors.background}
-            />
-          </BarButton>
-          <BarButton
-            background={Colors.outline}
-            onPress={chatBarber}
-            width={30}
-            height={30}
-            br={30}
-            padding={1}
-            ml={15}>
-            <BarIcon
-              type="AntDesign"
-              name="message1"
-              size={15}
-              color={Colors.background}
-            />
-          </BarButton>
+          <H6 style={{flex: 1}}>{barber.phone || 'No phone number'}</H6>
+          {barber.phone.length > 0 && (
+            <>
+              <BarIconButton onPress={callBarber} icon="phone" mr={10} />
+              <BarIconButton onPress={chatBarber} icon="message1" />
+            </>
+          )}
         </BarView>
 
         <H6 weight="bold" mt={20}>

@@ -4,7 +4,7 @@ import {dySize} from '../../utils/responsive';
 import {Colors} from '../../themes';
 
 export const BarButton = styled(Ripple)`
-  border: 1px solid ${Colors.gray};
+  border: 1px solid ${(props) => props.borderColor || Colors.gray};
   border-radius: ${(props) => dySize(props.br || 8)}px;
   border-width: ${(props) => (props.bordered ? 1 : 0)}
   padding: ${(props) => dySize(props.padding || 5)}px;

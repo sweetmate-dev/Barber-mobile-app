@@ -21,7 +21,6 @@ const BarberProfile = ({route}) => {
   ];
 
   const barber = route.params.barber;
-
   return (
     <View style={{flex: 1, backgroundColor: Colors.background}}>
       <BarHeader
@@ -52,7 +51,7 @@ const BarberProfile = ({route}) => {
         renderScene={SceneMap({
           info: () => <BarberInfoScreen barber={barber} />,
           reviews: BarberReviewScreen,
-          services: BarberServiceScreen,
+          services: () => <BarberServiceScreen barber={barber} />,
         })}
         onIndexChange={(i) => setIndex(i)}
         initialLayout={{width: Dimensions.get('window').width}}
