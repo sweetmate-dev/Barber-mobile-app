@@ -1,13 +1,16 @@
 import React from 'react';
 import {StyleSheet} from 'react-native';
+import {useQuery} from '@apollo/react-hooks';
 import LinearGradient from 'react-native-linear-gradient';
 import MapView, {Marker, GOOGLE_PROVIDER} from 'react-native-maps';
 import {BarText, BarIcon, H6, H5} from '../../components/styled/Text';
 import {RootView, BarView, BarContent} from '../../components/styled/View';
 import {BarButton} from '../../components/styled/Button';
+import {GET_BARBER_SERVICES} from '../../graphql/query';
 import {Colors} from '../../themes';
 import {dySize} from '../../utils/responsive';
 import {BarImage, BarIconButton} from '../../components/common';
+import NavigationService from '../../navigation/NavigationService';
 
 const BarberProfileActions = [
   {action: 'book', icon: 'calendar'},
@@ -22,10 +25,17 @@ const photos = [
 ];
 
 const BarberInfoScreen = ({barber}) => {
+  const {loading, error, data} = useQuery(GET_BARBER_SERVICES, {
+    variables: {barberId: barber.id.toString()},
+  });
   const onPressAction = (action) => {
     switch (action) {
       case 'book':
         console.log('book');
+        NavigationService.navigate('Booking', {
+          services: data.services,
+          selected: [],
+        });
         break;
       case 'review':
         console.log('review');
@@ -40,7 +50,6 @@ const BarberInfoScreen = ({barber}) => {
   callBarber = () => {};
 
   chatBarber = () => {};
-  console.log(barber.phone);
 
   return (
     <RootView justify="flex-start" align="flex-start">

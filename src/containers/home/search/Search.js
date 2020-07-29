@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {useQuery} from '@apollo/react-hooks';
 import {WaveIndicator} from 'react-native-indicators';
 
@@ -20,7 +20,12 @@ const SearchScreen = () => {
   const [searchInput, setSearchInput] = useState(null);
   const [name, setName] = useState('Barber');
   const [location, setLocation] = useState('Current Location');
-  console.log({state});
+  const searchBarbers = useQuery(GET_BARBERS);
+
+  useEffect(() => {
+    searchBarbers.refetch();
+  }, []);
+
   const onFocusSearch = ({nativeEvent}) => {
     if (searchInput) {
       searchInput.blur();
@@ -48,11 +53,8 @@ const SearchScreen = () => {
     );
   };
 
-  const {loading, error, data} = useQuery(GET_BARBERS, {
-    pollInterval: 500,
-  });
-  console.log({loading, data, error});
-  if (error) showAlert(error);
+  console.log({searchBarbers});
+  if (searchBarbers.error) showAlert(searchBarbers.error);
 
   return (
     <RootView justify="flex-start" align="flex-start">
@@ -75,13 +77,13 @@ const SearchScreen = () => {
         </BarView>
       </Header>
       <BarContent contentContainerStyle={{padding: dySize(10)}}>
-        {loading ? (
+        {searchBarbers.loading ? (
           <BarView justify="center" align="center">
             <WaveIndicator color={Colors.text} />
           </BarView>
         ) : (
           <FlatList
-            data={data.barber}
+            data={searchBarbers.data.barber}
             ListEmptyComponent={
               <H6 color={Colors.placeholder} align="center">
                 Can't find any barber

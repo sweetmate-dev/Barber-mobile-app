@@ -1,7 +1,9 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Dimensions} from 'react-native';
+import {useQuery} from '@apollo/react-hooks';
 import LinearGradient from 'react-native-linear-gradient';
 import {TabBar, TabView, SceneMap} from 'react-native-tab-view';
+import {GET_BARBER_SERVICES} from '../../graphql/query';
 import {BarView} from '../../components/styled/View';
 import {BarHeader, BarImage} from '../../components/common';
 import {H5} from '../../components/styled/Text';
@@ -13,14 +15,21 @@ import {Colors} from '../../themes';
 
 const BarberProfile = ({route}) => {
   const {initialIndex} = route.params;
+  const barber = route.params.barber;
   const [index, setIndex] = useState(initialIndex || 0);
+  const getBarberServices = useQuery(GET_BARBER_SERVICES, {
+    variables: {barberId: barber.id},
+  });
   const routes = [
     {key: 'info', title: 'INFO'},
     {key: 'reviews', title: '★★★★★'},
     {key: 'services', title: 'SERVICES'},
   ];
 
-  const barber = route.params.barber;
+  useEffect(() => {
+    getBarberServices.refetch();
+  }, []);
+
   return (
     <View style={{flex: 1, backgroundColor: Colors.background}}>
       <BarHeader

@@ -40,7 +40,7 @@
     "react-native-confirmation-code-field": "^6.5.0",
     "react-native-fast-image": "^8.3.2",
     "react-native-gesture-handler": "^1.7.0",
-    "react-native-image-picker": "^2.3.3",
+    "react-native-image-crop-picker": "^0.32.2",
     "react-native-indicators": "^0.17.0",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-maps": "0.27.1",

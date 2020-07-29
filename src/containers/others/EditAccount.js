@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import ImagePicker from 'react-native-image-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 import {BarView, RootView, BarContent} from '../../components/styled/View';
 import {BarHeader, BarImage, BarInput} from '../../components/common';
 import {H5} from '../../components/styled/Text';
@@ -12,24 +12,12 @@ const EditAccountScreen = () => {
   const [email, setEmail] = useState('matthew.sadler.9@gmail.com');
   const [image, setImageUrl] = useState('');
   onToggleImage = () => {
-    const options = {
-      title: 'Select Avatar',
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
-
-    ImagePicker.showImagePicker(options, (response) => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
-        setImageUrl(response.uri);
-      }
+    ImagePicker.openPicker({
+      width: 300,
+      height: 300,
+      cropping: true,
+    }).then((image) => {
+      setImageUrl(image.path);
     });
   };
   return (

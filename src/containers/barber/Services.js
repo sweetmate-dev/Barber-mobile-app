@@ -12,11 +12,9 @@ import {WaveIndicator} from 'react-native-indicators';
 
 const BarberServiceScreen = ({barber}) => {
   const {loading, error, data} = useQuery(GET_BARBER_SERVICES, {
-    variables: {barberId: barber.id},
-    pollInterval: 500,
+    variables: {barberId: barber.id.toString()},
   });
-  console.log({loading, data, error});
-  if (error) showAlert(error);
+  console.log({loading, error, data});
 
   const onSelectService = (service) => {
     NavigationService.navigate('Booking', {
@@ -25,6 +23,7 @@ const BarberServiceScreen = ({barber}) => {
     });
   };
 
+  if (error) return null;
   return (
     <RootView align="flex-start">
       <H6 weight="bold" ml={10}>
@@ -36,12 +35,13 @@ const BarberServiceScreen = ({barber}) => {
             <WaveIndicator color={Colors.text} />
           </BarView>
         )}
-        {!loading && data.services.length === 0 && (
+        {!loading && data && data.services.length === 0 && (
           <H6 color={Colors.placeholder} mt={20} align="center">
             No available services.
           </H6>
         )}
         {!loading &&
+          data &&
           data.services.map((service) => (
             <BarButton
               row
