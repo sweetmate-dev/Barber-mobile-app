@@ -9,6 +9,7 @@ import TabStack from '../containers/home';
 import BarberProfile from '../containers/others/BarberProfile';
 import BookingScreen from '../containers/others/Booking';
 import BookingDateScreen from '../containers/others/BookingDate';
+import EditAccountScreen from '../containers/others/EditAccount';
 import {Context as AuthContext} from '../context/authContext';
 
 const Stack = createStackNavigator();
@@ -34,6 +35,7 @@ const RootNavigator = () => {
           <Stack.Screen name="BarberProfile" component={BarberProfile} />
           <Stack.Screen name="Booking" component={BookingScreen} />
           <Stack.Screen name="BookingDate" component={BookingDateScreen} />
+          <Stack.Screen name="EditAccount" component={EditAccountScreen} />
         </Stack.Navigator>
       </ApolloProvider>
     </NavigationContainer>

@@ -3,7 +3,7 @@ import {YellowBox} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Amplify from 'aws-amplify';
 import {Provider as AuthProvider} from './context/authContext';
-import config from './services/aws-exports';
+import config from '../aws-exports';
 
 import AppWithNav from './navigation/AppWithNav';
 

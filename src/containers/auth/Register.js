@@ -1,7 +1,6 @@
 import React, {useState, useContext} from 'react';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import {Auth} from 'aws-amplify';
 import {Colors} from '../../themes';
 import {BarInput, BarSwitch, BarActionButton} from '../../components/common';
 import {H5, H6} from '../../components/styled/Text';
@@ -19,6 +18,8 @@ const RegisterScreen = () => {
     signUp({
       username: values.email,
       password: values.password,
+      barber,
+      fullName: values.firstName + ' ' + values.lastName,
     });
   };
 
@@ -41,9 +42,9 @@ const RegisterScreen = () => {
       <Formik
         validationSchema={validationSchema}
         initialValues={{
-          firstName: 'Tian',
-          lastName: 'Li',
-          email: 'litiyan2015@gmail.com',
+          firstName: 'Joris',
+          lastName: 'Mitani',
+          email: 'jorisloos1119@gmail.com',
           password: 'Test1234',
           confirm: 'Test1234',
         }}

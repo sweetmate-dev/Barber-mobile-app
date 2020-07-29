@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useContext} from 'react';
 import {useQuery} from '@apollo/react-hooks';
 import {WaveIndicator} from 'react-native-indicators';
 
@@ -13,12 +13,14 @@ import BarberItem from '../../barber/components/BarberItem';
 import {GET_BARBERS} from '../../../graphql/query';
 import {BarIcon, H6} from '../../../components/styled/Text';
 import {showAlert} from '../../../services/operators';
+import {Context as AuthContext} from '../../../context/authContext';
 
 const SearchScreen = () => {
+  const {state} = useContext(AuthContext);
   const [searchInput, setSearchInput] = useState(null);
   const [name, setName] = useState('Barber');
   const [location, setLocation] = useState('Current Location');
-
+  console.log({state});
   const onFocusSearch = ({nativeEvent}) => {
     if (searchInput) {
       searchInput.blur();

@@ -15,6 +15,7 @@ import {dySize} from '../../utils/responsive';
 
 const VerifyEmailScreen = ({route}) => {
   const email = route.params.email;
+  const password = route.params.password;
   const {sendCode, verifyEmail} = useContext(AuthContext);
   const [value, setValue] = useState('');
   const ref = useBlurOnFulfill({value, cellCount: 6});
@@ -29,7 +30,7 @@ const VerifyEmailScreen = ({route}) => {
   };
 
   verify = () => {
-    verifyEmail({email, code: value});
+    verifyEmail({email, password, code: value});
   };
 
   return (

@@ -4,6 +4,7 @@ import {H5, H6} from '../../../components/styled/Text';
 import {RootView, BarContent} from '../../../components/styled/View';
 import {BarHeader, BarItemButton} from '../../../components/common';
 import {dySize} from '../../../utils/responsive';
+import NavigationService from '../../../navigation/NavigationService';
 
 const SettingScreen = () => {
   return (
@@ -11,7 +12,11 @@ const SettingScreen = () => {
       <BarHeader title={<H5 weight="bold">SETTINGS</H5>} hasBack={false} />
       <BarContent contentContainerStyle={{padding: dySize(10)}}>
         <H6 weight="bold">ACCOUNTS</H6>
-        <BarItemButton text="Edit Account" icon="edit" />
+        <BarItemButton
+          text="Edit Account"
+          icon="edit"
+          onPress={() => NavigationService.navigate('EditAccount')}
+        />
         <BarItemButton text="Change Password" icon="key" />
         <BarItemButton text="Log Out" icon="logout" />
         <H6 weight="bold" mt={10}>

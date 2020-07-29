@@ -12,11 +12,8 @@ const BarSwitch = ({
   return (
     <Switch
       value={value}
-      activeText={
-        <H6 color={Colors.background} weight="bold">
-          {activeText}
-        </H6>
-      }
+      activeText={activeText}
+      activeTextStyle={{weight: 'bold', color: Colors.background}}
       inActiveText={inActiveText}
       circleSize={26}
       barHeight={30}
@@ -25,6 +22,7 @@ const BarSwitch = ({
       backgroundActive={Colors.outline}
       backgroundInactive={Colors.card}
       circleActiveColor={'#000000BB'}
+      useNativeDriver={true}
       renderInsideCircle={() => (
         <BarIcon
           type="AntDesign"

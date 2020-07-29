@@ -26,7 +26,7 @@ const authReducer = (state, action) => {
   }
 };
 
-const signIn = (dispatch) => {
+export const signIn = (dispatch) => {
   return async ({username, password}) => {
     showLoading('Logging in...');
     Auth.signIn(username, password)
@@ -44,7 +44,10 @@ const signIn = (dispatch) => {
         console.log({err});
         hideLoading();
         if (err.code === 'UserNotConfirmedException') {
-          NavigationService.navigate('VerifyEmail', {email: username});
+          NavigationService.navigate('VerifyEmail', {
+            email: username,
+            password,
+          });
         } else {
           showAlert(err.message);
         }
@@ -53,32 +56,35 @@ const signIn = (dispatch) => {
 };
 
 const signUp = (dispatch) => {
-  return async ({username, password}) => {
+  return async ({username, password, barber, fullName}) => {
     showLoading('Registering...');
     Auth.signUp({
       username,
       password,
-      attributes: {email: username},
+      attributes: {
+        email: username,
+      },
     })
       .then((data) => {
         console.log('sign up successful!');
+        hideLoading();
         console.log(JSON.stringify(data));
+        NavigationService.navigate('VerifyEmail', {email: username, password});
       })
       .catch((err) => {
+        hideLoading();
         showAlert(err.message);
       });
   };
 };
 
 const verifyEmail = (dispatch) => {
-  return async ({email, code}) => {
+  return async ({email, password, code}) => {
     showLoading('Verifying...');
     Auth.confirmSignUp(email, code)
       .then((res) => {
         // res: SUCCESS
-        hideLoading();
-        console.log('Verified successful!', res);
-        NavigationService.navigate('TabStack');
+        signIn(dispatch)({username: email, password});
       })
       .catch((err) => {
         hideLoading();
