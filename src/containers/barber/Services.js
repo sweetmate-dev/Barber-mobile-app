@@ -20,6 +20,7 @@ const BarberServiceScreen = ({barber}) => {
     NavigationService.navigate('Booking', {
       services: data.services,
       selected: [service.id],
+      barber,
     });
   };
 

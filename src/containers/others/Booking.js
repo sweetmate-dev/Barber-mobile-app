@@ -33,6 +33,7 @@ const PaymentMethods = [
 
 const Booking = ({route}) => {
   const services = route.params.services || [];
+  const barber = route.params.barber;
   const [selected, setSelected] = useState(route.params.selected || []); // selected service ids
   const [sum, setSum] = useState(0);
   const [bookDate, setBookDate] = useState(null);
@@ -202,6 +203,7 @@ const Booking = ({route}) => {
         </BarView>
         <BookAdditionalInformation
           onChangeValues={(errorInfo) => (this.errorInfo = errorInfo)}
+          barber={barber}
         />
       </BarContent>
       <BarView

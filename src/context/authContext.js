@@ -34,8 +34,9 @@ export const signIn = (dispatch) => {
         // get Cognito tokens from current session
         const session = user.signInUserSession;
         const {idToken, refreshToken} = session;
-        dispatch({type: 'saveJWTToken', payload: idToken});
-        dispatch({type: 'saveRefreshToken', payload: refreshToken});
+        console.log('attributes: ', user.attributes);
+        dispatch({type: 'saveJWTToken', payload: idToken.jwtToken});
+        dispatch({type: 'saveRefreshToken', payload: refreshToken.token});
         dispatch({type: 'saveUser', payload: user.attributes});
         hideLoading();
         NavigationService.navigate('TabStack');
@@ -63,17 +64,23 @@ const signUp = (dispatch) => {
       password,
       attributes: {
         email: username,
+        role: barber ? 'barber' : 'customer',
+        fullname: fullName,
       },
     })
       .then((data) => {
         console.log('sign up successful!');
         hideLoading();
         console.log(JSON.stringify(data));
-        NavigationService.navigate('VerifyEmail', {email: username, password});
+        NavigationService.navigate('VerifyEmail', {
+          email: username,
+          password,
+        });
       })
       .catch((err) => {
         hideLoading();
         showAlert(err.message);
+        console.log(err.message);
       });
   };
 };
@@ -84,6 +91,7 @@ const verifyEmail = (dispatch) => {
     Auth.confirmSignUp(email, code)
       .then((res) => {
         // res: SUCCESS
+        hideLoading();
         signIn(dispatch)({username: email, password});
       })
       .catch((err) => {

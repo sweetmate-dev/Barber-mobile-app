@@ -9,6 +9,12 @@ export const GET_BARBERS = gql`
       location
       avatar
       phone
+      requirePhoneNumber
+      requireStreetAddress
+      requireCity
+      requireState
+      requireZipCode
+      requireHowFind
     }
   }
 `;

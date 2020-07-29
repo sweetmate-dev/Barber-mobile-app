@@ -8,44 +8,44 @@ import {BarInput} from '../../../components/common';
 
 const required_informations = [
   {
-    key: 'phone',
+    key: 'requirePhoneNumber',
     placeholder: 'Phone Number',
     keyboardType: 'phone-pad',
     errorText: 'Phone Number is required',
   },
   {
-    key: 'street',
+    key: 'requireStreetAddress',
     placeholder: 'Street Address',
     errorText: 'Street Address is required',
   },
   {
-    key: 'city',
+    key: 'requireCity',
     placeholder: 'City',
     errorText: 'City is required',
   },
   {
-    key: 'state',
+    key: 'requireState',
     placeholder: 'State',
     errorText: 'State is required',
   },
   {
-    key: 'zipcode',
+    key: 'requireZipCode',
     placeholder: 'Zip Code',
     errorText: 'Zip Code is required',
   },
   {
-    key: 'how',
+    key: 'requireHowFind',
     placeholder: 'How did you find this barber?',
     errorText: 'You must answer the question "how did you find this barber?"',
   },
 ];
 
-const BookAdditionalInformation = ({onChangeValues}) => {
+const BookAdditionalInformation = ({barber, onChangeValues}) => {
   const [inputs, setInputs] = useState({});
-
   useEffect(() => {
     let error = [];
     required_informations.map((info) => {
+      if (!barber[info.key]) return;
       if (!inputs[info.key] || inputs[info.key].length === 0)
         error.push(info.errorText);
     });
@@ -63,25 +63,28 @@ const BookAdditionalInformation = ({onChangeValues}) => {
       <H5 weight="bold" mt={10}>
         ADDITIONAL INFORMATION
       </H5>
-      {required_informations.map((info) => (
-        <View
-          key={info.key}
-          style={{
-            backgroundColor: Colors.card,
-            marginBottom: 2,
-            paddingHorizontal: 15,
-          }}>
-          <BarInput
-            label={info.placeholder}
-            onChangeText={handleChange(info.key)}
-            keyboardType={info.keyboardType || 'default'}
-            value={inputs[info.key]}
-            lineWidth={0}
-            activeLineWidth={0}
-            containerStyle={{margin: -5}}
-          />
-        </View>
-      ))}
+      {required_informations.map((info) => {
+        if (!barber[info.key]) return null;
+        return (
+          <View
+            key={info.key}
+            style={{
+              backgroundColor: Colors.card,
+              marginBottom: 2,
+              paddingHorizontal: 15,
+            }}>
+            <BarInput
+              label={info.placeholder}
+              onChangeText={handleChange(info.key)}
+              keyboardType={info.keyboardType || 'default'}
+              value={inputs[info.key]}
+              lineWidth={0}
+              activeLineWidth={0}
+              containerStyle={{margin: -5}}
+            />
+          </View>
+        );
+      })}
     </View>
   );
 };

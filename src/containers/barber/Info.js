@@ -35,6 +35,7 @@ const BarberInfoScreen = ({barber}) => {
         NavigationService.navigate('Booking', {
           services: data.services,
           selected: [],
+          barber,
         });
         break;
       case 'review':
