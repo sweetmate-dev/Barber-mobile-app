@@ -1,7 +1,6 @@
 import {Auth} from 'aws-amplify';
 import createDataContext from './createDataContext';
 import {showAlert, showLoading, hideLoading} from '../services/operators';
-import {ERRORS} from '../utils/constants';
 import NavigationService from '../navigation/NavigationService';
 
 const authReducer = (state, action) => {
@@ -17,6 +16,7 @@ const authReducer = (state, action) => {
         refreshToken: action.payload,
       };
     case 'saveUser':
+      console.log('Payload: ', action.payload);
       return {
         ...state,
         user: action.payload,
@@ -24,6 +24,12 @@ const authReducer = (state, action) => {
     default:
       return state;
   }
+};
+
+export const dispatch = (dispatch) => {
+  return async (action) => {
+    dispatch(action);
+  };
 };
 
 export const signIn = (dispatch) => {
@@ -64,8 +70,8 @@ const signUp = (dispatch) => {
       password,
       attributes: {
         email: username,
-        role: barber ? 'barber' : 'customer',
-        fullname: fullName,
+        'custom:role': barber ? 'barber' : 'customer',
+        'custom:fullname': fullName,
       },
     })
       .then((data) => {
@@ -130,6 +136,7 @@ export const {Provider, Context} = createDataContext(
     signUp,
     verifyEmail,
     sendCode,
+    dispatch,
   },
   initialState,
 );

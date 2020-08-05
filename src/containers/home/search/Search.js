@@ -16,14 +16,13 @@ import {showAlert} from '../../../services/operators';
 import {Context as AuthContext} from '../../../context/authContext';
 
 const SearchScreen = () => {
-  const {state} = useContext(AuthContext);
   const [searchInput, setSearchInput] = useState(null);
   const [name, setName] = useState('Barber');
   const [location, setLocation] = useState('Current Location');
   const searchBarbers = useQuery(GET_BARBERS);
 
   useEffect(() => {
-    searchBarbers.refetch();
+    searchBarbers && searchBarbers.refetch();
   }, []);
 
   const onFocusSearch = ({nativeEvent}) => {
@@ -53,7 +52,6 @@ const SearchScreen = () => {
     );
   };
 
-  console.log({searchBarbers});
   if (searchBarbers.error) showAlert(searchBarbers.error);
 
   return (
@@ -83,7 +81,7 @@ const SearchScreen = () => {
           </BarView>
         ) : (
           <FlatList
-            data={searchBarbers.data.barber}
+            data={searchBarbers.data.barbers}
             ListEmptyComponent={
               <H6 color={Colors.placeholder} align="center">
                 Can't find any barber

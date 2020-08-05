@@ -49,7 +49,7 @@ const BookAdditionalInformation = ({barber, onChangeValues}) => {
       if (!inputs[info.key] || inputs[info.key].length === 0)
         error.push(info.errorText);
     });
-    onChangeValues(error);
+    onChangeValues(inputs, error);
   }, [inputs]);
 
   const handleChange = (key) => (value) => {

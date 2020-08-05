@@ -1,16 +1,24 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import * as _ from 'lodash';
+import moment from 'moment';
+import {useMutation} from '@apollo/client';
 import {RootView, BarContent, BarView} from '../../components/styled/View';
 import {BarHeader, BarActionButton} from '../../components/common';
 import {dySize} from '../../utils/responsive';
 import BarberItem from '../barber/components/BarberItem';
 import {Colors} from '../../themes';
 import {H6, H5, BarIcon} from '../../components/styled/Text';
-import {showAlert, getTimeFormat} from '../../services/operators';
+import {
+  showAlert,
+  getTimeFormat,
+  showLoading,
+  hideLoading,
+} from '../../services/operators';
 import {BarButton} from '../../components/styled/Button';
-import moment from 'moment';
 import BookAdditionalInformation from '../barber/components/BookAdditionalInformation';
 import NavigationService from '../../navigation/NavigationService';
+import {ADD_BOOK, ADD_SERVICES} from '../../graphql/mutation';
+import {Context as AuthContext} from '../../context/authContext';
 
 const USER = {
   id: 1,
@@ -32,13 +40,18 @@ const PaymentMethods = [
 ];
 
 const Booking = ({route}) => {
+  const editing = route.params.editing || false;
   const services = route.params.services || [];
   const barber = route.params.barber;
+  const {state} = useContext(AuthContext);
   const [selected, setSelected] = useState(route.params.selected || []); // selected service ids
   const [sum, setSum] = useState(0);
-  const [bookDate, setBookDate] = useState(null);
-  const [bookTime, setBookTime] = useState(null);
-  const [payMethod, setPayMethod] = useState('shop');
+  const [bookDateTime, setBookDateTime] = useState(route.params.time || null);
+  const [payMethod, setPayMethod] = useState(route.params.payMethod || 'shop');
+  const [additionalInputs, setAdditionalInputs] = useState({});
+  const [addBook, addedBook] = useMutation(ADD_BOOK);
+  const [addServices, addedServices] = useMutation(ADD_SERVICES);
+  const completed = route.params.completed || false;
 
   useEffect(() => {
     let sum = 0;
@@ -61,27 +74,71 @@ const Booking = ({route}) => {
   };
 
   gotoBookingCalendar = () => {
-    NavigationService.navigate('BookingDate', {
-      bookDate,
-      bookTime,
+    const TS = new Date(bookDateTime);
+    const params = {
+      bookDate: bookDateTime ? moment(bookDateTime).format('YYYY-MM-DD') : null,
+      bookTime: TS.getHours() + TS.getMinutes() / 60,
       onSelectBookingDate,
-    });
+    };
+    console.log({params});
+    NavigationService.navigate('BookingDate', params);
   };
 
   onSelectBookingDate = (date, time) => {
-    console.log({date});
     if (date) {
-      setBookDate(date);
-      setBookTime(time);
+      let TS = moment(date).local();
+      TS += time * 3600 * 1000;
+      setBookDateTime(TS);
     }
   };
 
   onPressBook = () => {
     if (selected.length === 0)
       showAlert('You must select one service at least');
-    else if (!bookDate) showAlert('You must select booking data');
+    else if (!bookDateTime) showAlert('You must select booking data');
     else if (errorInfo.length > 0) showAlert(errorInfo[0]);
+    else {
+      showLoading('Adding book...');
+      addBook({
+        variables: {
+          user_id: state.user.id,
+          time: new Date(bookDateTime).toISOString(),
+          payment: payMethod,
+          barber_id: barber.id,
+          completed: false,
+        },
+      });
+    }
   };
+
+  const book = _.get(addedBook, ['data', 'insert_bookings', 'returning'], []);
+  if (book.length > 0) {
+    let param = [];
+    const bookId = book[0].id;
+    selected.map((selectedService) => {
+      console.log({selectedService});
+      param.push({
+        book_id: bookId,
+        service_id: selectedService,
+      });
+    });
+    console.log({param});
+    addServices({
+      variables: {
+        objects: param,
+      },
+    });
+  }
+
+  const book_service = _.get(
+    addedServices,
+    ['data', 'insert_book_service', 'returning'],
+    [],
+  );
+  if (book_service.length > 0) {
+    hideLoading();
+    NavigationService.goBack();
+  }
 
   return (
     <RootView>
@@ -92,7 +149,7 @@ const Booking = ({route}) => {
           padding: dySize(10),
           paddingBottom: dySize(60),
         }}>
-        <BarberItem user={USER} />
+        <BarberItem user={barber} hasCallButton />
         <BarView background={Colors.card} ph={10}>
           <H6>
             As a result of the COVID-19 pandemic, many states and local
@@ -162,8 +219,10 @@ const Booking = ({route}) => {
           onPress={gotoBookingCalendar}
           background={Colors.card}
           justify="space-between">
-          {bookDate && <H5>{`${bookDate}    ${getTimeFormat(bookTime)}`}</H5>}
-          {!bookDate && <H5 color={Colors.placeholder}>Select</H5>}
+          {bookDateTime && (
+            <H5>{moment(bookDateTime).format('YYYY-MM-DD     HH:mm A')}</H5>
+          )}
+          {!bookDateTime && <H5 color={Colors.placeholder}>Select</H5>}
           <BarIcon type="AntDesign" name="right" color={Colors.placeholder} />
         </BarButton>
 
@@ -202,7 +261,10 @@ const Booking = ({route}) => {
           ))}
         </BarView>
         <BookAdditionalInformation
-          onChangeValues={(errorInfo) => (this.errorInfo = errorInfo)}
+          onChangeValues={(inputs, errorInfo) => {
+            setAdditionalInputs(inputs);
+            this.errorInfo = errorInfo;
+          }}
           barber={barber}
         />
       </BarContent>

@@ -21,7 +21,6 @@ const RootNavigator = () => {
       uri: 'https://thebarbapp.herokuapp.com/v1/graphql',
       headers: {
         'x-hasura-admin-secret': 'SuperSecretAminSecret2020!',
-        Authorization: `Bearer ${authToken}`,
       },
       cache: new InMemoryCache(),
     });

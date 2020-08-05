@@ -1,10 +1,10 @@
 import React, {useContext} from 'react';
 import {View} from 'react-native';
+import {useMutation} from '@apollo/client';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {BarInput, BarActionButton} from '../../components/common';
 import {RootView} from '../../components/styled/View';
-import NavigationService from '../../navigation/NavigationService';
 import {Context as AuthContext} from '../../context/authContext';
 
 const LoginScreen = () => {
@@ -26,7 +26,7 @@ const LoginScreen = () => {
       <Formik
         validationSchema={validationSchema}
         initialValues={{
-          email: 'matthew.sadler.9@gmail.com',
+          email: 'litiyan2015@gmail.com',
           password: 'Test1234',
         }}
         onSubmit={(values) => login(values)}

@@ -42,9 +42,9 @@ const RegisterScreen = () => {
       <Formik
         validationSchema={validationSchema}
         initialValues={{
-          firstName: 'Matthew',
-          lastName: 'Sadler',
-          email: 'matthew.sadler.9@gmail.com',
+          firstName: 'Tiyan',
+          lastName: 'Li',
+          email: 'litiyan2015@gmail.com',
           password: 'Test1234',
           confirm: 'Test1234',
         }}
