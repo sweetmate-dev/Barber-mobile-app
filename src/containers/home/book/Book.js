@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {View, Dimensions} from 'react-native';
 import {TabBar, TabView, SceneMap} from 'react-native-tab-view';
 import {useQuery} from '@apollo/react-hooks';
@@ -24,10 +24,6 @@ const BookScreen = ({route, navigation}) => {
     {key: 'upcoming', title: 'UPCOMING'},
     {key: 'past', title: 'PAST'},
   ];
-
-  if (!loading && !error) {
-    console.log({state, data});
-  }
 
   return (
     <View style={{flex: 1, backgroundColor: Colors.background}}>

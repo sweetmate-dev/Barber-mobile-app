@@ -17,16 +17,13 @@ import {
 import {BarButton} from '../../components/styled/Button';
 import BookAdditionalInformation from '../barber/components/BookAdditionalInformation';
 import NavigationService from '../../navigation/NavigationService';
-import {ADD_BOOK, ADD_SERVICES} from '../../graphql/mutation';
+import {
+  ADD_BOOK,
+  UPDATE_BOOK,
+  ADD_SERVICES,
+  UPDATE_SERVICES,
+} from '../../graphql/mutation';
 import {Context as AuthContext} from '../../context/authContext';
-
-const USER = {
-  id: 1,
-  avatar: 'https://homepages.cae.wisc.edu/~ece533/images/airplane.png',
-  name: 'Matthew Sadler',
-  title: 'Senior Barber',
-  location: 'Aurora, CO, United States',
-};
 
 const PaymentMethods = [
   {
@@ -43,14 +40,19 @@ const Booking = ({route}) => {
   const editing = route.params.editing || false;
   const services = route.params.services || [];
   const barber = route.params.barber;
+  const bookId = route.params.bookId;
   const {state} = useContext(AuthContext);
   const [selected, setSelected] = useState(route.params.selected || []); // selected service ids
   const [sum, setSum] = useState(0);
   const [bookDateTime, setBookDateTime] = useState(route.params.time || null);
-  const [payMethod, setPayMethod] = useState(route.params.payMethod || 'shop');
+  const [payMethod, setPayMethod] = useState(
+    route.params.paymentMethod || 'shop',
+  );
   const [additionalInputs, setAdditionalInputs] = useState({});
   const [addBook, addedBook] = useMutation(ADD_BOOK);
+  const [updateBook, updatedBook] = useMutation(UPDATE_BOOK);
   const [addServices, addedServices] = useMutation(ADD_SERVICES);
+  const [updateServices, updatedServices] = useMutation(UPDATE_SERVICES);
   const completed = route.params.completed || false;
 
   useEffect(() => {
@@ -80,7 +82,6 @@ const Booking = ({route}) => {
       bookTime: TS.getHours() + TS.getMinutes() / 60,
       onSelectBookingDate,
     };
-    console.log({params});
     NavigationService.navigate('BookingDate', params);
   };
 
@@ -97,7 +98,7 @@ const Booking = ({route}) => {
       showAlert('You must select one service at least');
     else if (!bookDateTime) showAlert('You must select booking data');
     else if (errorInfo.length > 0) showAlert(errorInfo[0]);
-    else {
+    else if (!editing) {
       showLoading('Adding book...');
       addBook({
         variables: {
@@ -108,21 +109,31 @@ const Booking = ({route}) => {
           completed: false,
         },
       });
+    } else {
+      showLoading('Updating book...');
+      updateBook({
+        variables: {
+          book_id: bookId,
+          user_id: state.user.id,
+          time: new Date(bookDateTime).toISOString(),
+          payment: payMethod,
+          barber_id: barber.id,
+          completed: false,
+        },
+      });
     }
   };
 
-  const book = _.get(addedBook, ['data', 'insert_bookings', 'returning'], []);
+  let book = _.get(addedBook, ['data', 'insert_bookings', 'returning'], []);
   if (book.length > 0) {
     let param = [];
     const bookId = book[0].id;
     selected.map((selectedService) => {
-      console.log({selectedService});
       param.push({
         book_id: bookId,
         service_id: selectedService,
       });
     });
-    console.log({param});
     addServices({
       variables: {
         objects: param,
@@ -130,8 +141,36 @@ const Booking = ({route}) => {
     });
   }
 
-  const book_service = _.get(
+  book = _.get(updatedBook, ['data', 'update_bookings', 'returning'], []);
+  if (book.length > 0) {
+    let param = [];
+    const bookId = book[0].id;
+    selected.map((selectedService) => {
+      param.push({
+        book_id: bookId,
+        service_id: selectedService,
+      });
+    });
+    updateServices({
+      variables: {
+        book_id: bookId,
+        objects: param,
+      },
+    });
+  }
+
+  let book_service = _.get(
     addedServices,
+    ['data', 'insert_book_service', 'returning'],
+    [],
+  );
+  if (book_service.length > 0) {
+    hideLoading();
+    NavigationService.goBack();
+  }
+
+  book_service = _.get(
+    updatedServices,
     ['data', 'insert_book_service', 'returning'],
     [],
   );
@@ -283,7 +322,12 @@ const Booking = ({route}) => {
         }}
         height={80}>
         <H5 color={Colors.outline}>${sum}</H5>
-        <BarActionButton width={80} mt={0} text="Book" onPress={onPressBook} />
+        <BarActionButton
+          width={120}
+          mt={0}
+          text={editing ? 'Update Book' : 'Book'}
+          onPress={onPressBook}
+        />
       </BarView>
     </RootView>
   );
