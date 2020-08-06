@@ -8,12 +8,7 @@ import {dySize} from '../../utils/responsive';
 import BarberItem from '../barber/components/BarberItem';
 import {Colors} from '../../themes';
 import {H6, H5, BarIcon} from '../../components/styled/Text';
-import {
-  showAlert,
-  getTimeFormat,
-  showLoading,
-  hideLoading,
-} from '../../services/operators';
+import {showAlert, showLoading, hideLoading} from '../../services/operators';
 import {BarButton} from '../../components/styled/Button';
 import BookAdditionalInformation from '../barber/components/BookAdditionalInformation';
 import NavigationService from '../../navigation/NavigationService';

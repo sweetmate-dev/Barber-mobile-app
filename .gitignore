@@ -58,6 +58,8 @@ buck-out/
 # CocoaPods
 /ios/Pods/
 
+/src/services/config.js
+
 # credentials
 
 aws-exports.js

@@ -115,3 +115,26 @@ export const UPDATE_SERVICES = gql`
     }
   }
 `;
+
+export const UPDATE_USER_PROFILE = gql`
+  mutation UpdateProfile(
+    $id: String!
+    $name: String!
+    $email: String!
+    $phone: String!
+    $avatar: String!
+  ) {
+    update_users(
+      where: {id: {_eq: $id}}
+      _set: {name: $name, email: $email, phone: $phone, avatar: $avatar}
+    ) {
+      returning {
+        id
+        name
+        email
+        phone
+        avatar
+      }
+    }
+  }
+`;

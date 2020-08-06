@@ -1,6 +1,15 @@
 import {Linking} from 'react-native';
+import * as _ from 'lodash';
 import Toast from 'react-native-tiny-toast';
 import {Loading2} from '../assets/images';
+
+export const listener_graphQL_return = (data, key, callback) => {
+  let result = _.get(data, ['data', key, 'returning'], []);
+  if (result.length > 0) {
+    hideLoading();
+    callback(result);
+  }
+};
 
 let myToast;
 
