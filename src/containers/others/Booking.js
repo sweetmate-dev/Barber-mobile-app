@@ -19,6 +19,7 @@ import {
   UPDATE_SERVICES,
 } from '../../graphql/mutation';
 import {Context as AuthContext} from '../../context/authContext';
+import {GET_MY_BOOKINGS} from '../../graphql/query';
 
 const PaymentMethods = [
   {
@@ -36,18 +37,14 @@ const Booking = ({route}) => {
   const services = route.params.services || [];
   const barber = route.params.barber;
   const bookId = route.params.bookId;
-  const {state} = useContext(AuthContext);
-  const [selected, setSelected] = useState(route.params.selected || []); // selected service ids
   const [sum, setSum] = useState(0);
+  const [selected, setSelected] = useState(route.params.selected || []); // selected service ids
   const [bookDateTime, setBookDateTime] = useState(route.params.time || null);
   const [payMethod, setPayMethod] = useState(
     route.params.paymentMethod || 'shop',
   );
+  const {state} = useContext(AuthContext);
   const [additionalInputs, setAdditionalInputs] = useState({});
-  const [addBook, addedBook] = useMutation(ADD_BOOK);
-  const [updateBook, updatedBook] = useMutation(UPDATE_BOOK);
-  const [addServices, addedServices] = useMutation(ADD_SERVICES);
-  const [updateServices, updatedServices] = useMutation(UPDATE_SERVICES);
   const completed = route.params.completed || false;
 
   useEffect(() => {
@@ -88,6 +85,69 @@ const Booking = ({route}) => {
     }
   };
 
+  onAddedBook = (data) => {
+    let param = [];
+    const bookId = data.insert_bookings.returning[0].id;
+    selected.map((selectedService) => {
+      param.push({
+        book_id: bookId,
+        service_id: selectedService,
+      });
+    });
+    addServices({
+      variables: {
+        objects: param,
+      },
+    });
+  };
+
+  onAddedServices = (data) => {
+    hideLoading();
+    NavigationService.goBack();
+  };
+
+  onUpdatedBook = (data) => {
+    let param = [];
+    const bookId = data.update_bookings.returning[0].id;
+    console.log({selected});
+    selected.map((selectedService) => {
+      param.push({
+        book_id: bookId,
+        service_id: selectedService,
+      });
+    });
+    updateServices({
+      variables: {
+        book_id: bookId,
+        objects: param,
+      },
+    });
+  };
+
+  onUpdatedServices = (data) => {
+    hideLoading();
+    NavigationService.goBack();
+  };
+
+  const [addBook] = useMutation(ADD_BOOK, {
+    onCompleted: onAddedBook,
+  });
+  const [updateBook] = useMutation(UPDATE_BOOK, {
+    onCompleted: onUpdatedBook,
+  });
+  const [addServices] = useMutation(ADD_SERVICES, {
+    onCompleted: onAddedServices,
+  });
+  const [updateServices] = useMutation(UPDATE_SERVICES, {
+    onCompleted: onUpdatedServices,
+    refetchQueries: [
+      {
+        query: GET_MY_BOOKINGS,
+        variables: {user_id: state.user.id},
+      },
+    ],
+  });
+
   onPressBook = () => {
     if (selected.length === 0)
       showAlert('You must select one service at least');
@@ -118,61 +178,6 @@ const Booking = ({route}) => {
       });
     }
   };
-
-  let book = _.get(addedBook, ['data', 'insert_bookings', 'returning'], []);
-  if (book.length > 0) {
-    let param = [];
-    const bookId = book[0].id;
-    selected.map((selectedService) => {
-      param.push({
-        book_id: bookId,
-        service_id: selectedService,
-      });
-    });
-    addServices({
-      variables: {
-        objects: param,
-      },
-    });
-  }
-
-  book = _.get(updatedBook, ['data', 'update_bookings', 'returning'], []);
-  if (book.length > 0) {
-    let param = [];
-    const bookId = book[0].id;
-    selected.map((selectedService) => {
-      param.push({
-        book_id: bookId,
-        service_id: selectedService,
-      });
-    });
-    updateServices({
-      variables: {
-        book_id: bookId,
-        objects: param,
-      },
-    });
-  }
-
-  let book_service = _.get(
-    addedServices,
-    ['data', 'insert_book_service', 'returning'],
-    [],
-  );
-  if (book_service.length > 0) {
-    hideLoading();
-    NavigationService.goBack();
-  }
-
-  book_service = _.get(
-    updatedServices,
-    ['data', 'insert_book_service', 'returning'],
-    [],
-  );
-  if (book_service.length > 0) {
-    hideLoading();
-    NavigationService.goBack();
-  }
 
   return (
     <RootView>

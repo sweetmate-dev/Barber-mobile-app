@@ -24,7 +24,7 @@ const SearchInputScreen = ({route}) => {
       <Header
         style={{
           width: dySize(375),
-          height: dySize(80),
+          height: dySize(90),
           backgroundColor: Colors.background,
           flexDirection: 'column',
           justifyContent: 'center',

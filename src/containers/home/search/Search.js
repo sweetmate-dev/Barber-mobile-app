@@ -21,18 +21,14 @@ const SearchScreen = () => {
   const [location, setLocation] = useState('Current Location');
   const searchBarbers = useQuery(GET_BARBERS);
 
-  useEffect(() => {
-    searchBarbers && searchBarbers.refetch();
-  }, []);
-
   const onFocusSearch = ({nativeEvent}) => {
     if (searchInput) {
-      searchInput.blur();
       NavigationService.navigate('SearchInput', {
         onChangeSearchText,
         name: name === 'Barber' || name,
         location: location === 'Current Location' || location,
       });
+      searchInput.blur();
     }
   };
 
@@ -51,8 +47,6 @@ const SearchScreen = () => {
       <BarberItem key={item.id} user={item} onPress={() => onPressUser(item)} />
     );
   };
-
-  if (searchBarbers.error) showAlert(searchBarbers.error);
 
   return (
     <RootView justify="flex-start" align="flex-start">
@@ -79,6 +73,10 @@ const SearchScreen = () => {
           <BarView justify="center" align="center">
             <WaveIndicator color={Colors.text} />
           </BarView>
+        ) : searchBarbers.error ? (
+          <H6 color={Colors.placeholder} align="center" mt={30}>
+            {searchBarbers.error}
+          </H6>
         ) : (
           <FlatList
             data={searchBarbers.data.barbers}

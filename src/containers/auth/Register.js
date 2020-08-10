@@ -6,15 +6,13 @@ import {BarInput, BarSwitch, BarActionButton} from '../../components/common';
 import {H5, H6} from '../../components/styled/Text';
 import {RootView, BarView, BarContent} from '../../components/styled/View';
 import {dySize} from '../../utils/responsive';
-import {openUrl, showAlert} from '../../services/operators';
+import {openUrl} from '../../services/operators';
 import {Context as AuthContext} from '../../context/authContext';
 
 const RegisterScreen = () => {
   const {signUp} = useContext(AuthContext);
   const [barber, setBarber] = useState(false);
   register = (values) => {
-    console.log({values});
-    // NavigationService.navigate('TabStack');
     signUp({
       username: values.email,
       password: values.password,

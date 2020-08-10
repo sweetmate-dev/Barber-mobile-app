@@ -10,7 +10,7 @@ import BookingScreen from '../containers/others/Booking';
 import BookingDateScreen from '../containers/others/BookingDate';
 import EditAccountScreen from '../containers/others/EditAccount';
 import {Context as AuthContext} from '../context/authContext';
-import {GET_MY_BOOKINGS} from '../graphql/query';
+import {GET_MY_BOOKINGS, GET_BARBERS} from '../graphql/query';
 
 const Stack = createStackNavigator();
 
@@ -20,22 +20,22 @@ const RootNavigator = () => {
   const getMyBooks = useQuery(GET_MY_BOOKINGS, {
     variables: {user_id: state.user.id},
   });
+  const searchBarbers = useQuery(GET_BARBERS);
 
   const onStateChanged = (navigationState) => {
     const LastRoute = navigationState.routes[navigationState.routes.length - 1];
     if (LastRoute.state) {
-      if (LastRoute.state.index === tabIndex || !state.user || !getMyBooks)
-        return;
+      if (LastRoute.state.index === tabIndex || !state.user) return;
 
       setTabIndex(LastRoute.state.index);
       switch (LastRoute.state.index) {
         case 0:
           break;
         case 1:
-          console.log('refetching...');
-          getMyBooks.refetch();
+          getMyBooks && getMyBooks.refetch();
           break;
         case 2:
+          searchBarbers && searchBarbers.refetch();
           break;
         case 3:
           break;

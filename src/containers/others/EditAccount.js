@@ -11,11 +11,7 @@ import API from '../../services/api';
 import {BarButton} from '../../components/styled/Button';
 import {Context as AuthContext} from '../../context/authContext';
 import {UPDATE_USER_PROFILE} from '../../graphql/mutation';
-import {
-  showLoading,
-  listener_graphQL_return,
-  hideLoading,
-} from '../../services/operators';
+import {showLoading, hideLoading} from '../../services/operators';
 import NavigationService from '../../navigation/NavigationService';
 
 const EditAccountScreen = () => {

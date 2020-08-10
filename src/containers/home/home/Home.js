@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import {H5, BarIcon} from '../../../components/styled/Text';
 import {RootView, BarContent, BarView} from '../../../components/styled/View';
@@ -9,6 +9,7 @@ import {Welcome, Jacket, Face} from '../../../assets/images';
 import {Colors} from '../../../themes';
 import NavigationService from '../../../navigation/NavigationService';
 import MyBarberItem from './MyBarberItem';
+import {Context as AuthContext} from '../../../context/authContext';
 
 const MyBarbers = [
   {
@@ -35,6 +36,7 @@ const MyCuts = [
 ];
 
 const HomeScreen = () => {
+  const {state} = useContext(AuthContext);
   const onPressAddCut = () => {
     // open image picker
   };
@@ -50,7 +52,7 @@ const HomeScreen = () => {
       <BarContent
         style={{padding: dySize(10)}}
         contentContainerStyle={{paddingBottom: 100}}>
-        <BarImage image={Welcome} width={355} height={250} />
+        <BarImage image={{uri: state.user.avatar}} width={355} height={250} />
         <LinearGradient
           colors={['#00000055', '#000000CC', '#000000FF']}
           style={{
@@ -62,8 +64,8 @@ const HomeScreen = () => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <BarImage round image={Welcome} />
-          <H5 weight="bold">Tian Li</H5>
+          <BarImage round image={{uri: state.user.avatar}} />
+          <H5 weight="bold">{state.user.name}</H5>
         </LinearGradient>
 
         <BarView row justify="space-between" align="center">

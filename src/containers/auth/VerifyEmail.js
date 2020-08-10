@@ -1,12 +1,11 @@
-import React, {useState, useEffect, useContext} from 'react';
-import {View} from 'react-native';
+import React, {useState, useContext} from 'react';
 import {
   CodeField,
   Cursor,
   useBlurOnFulfill,
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
-import {BarInput, BarActionButton, BarHeader} from '../../components/common';
+import {BarActionButton, BarHeader} from '../../components/common';
 import {RootView, BarView} from '../../components/styled/View';
 import {Context as AuthContext} from '../../context/authContext';
 import {H1, H5} from '../../components/styled/Text';
@@ -58,7 +57,6 @@ const VerifyEmailScreen = ({route}) => {
         textContentType="oneTimeCode"
         renderCell={({index, symbol, isFocused}) => (
           <BarView
-            // Make sure that you pass onLayout={getCellOnLayoutHandler(index)} prop to root component of "Cell"
             onLayout={getCellOnLayoutHandler(index)}
             key={index}
             width={45}

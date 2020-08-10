@@ -15,41 +15,35 @@ const Tab = createBottomTabNavigator();
 
 const TabStack = () => {
   const {state, dispatch} = useContext(AuthContext);
-  const [updateUserId, updatedUserData] = useMutation(UPDATE_USER_ID);
-  const [updateBarberId, updatedBarberData] = useMutation(UPDATE_BARBER_ID);
+  const [updateUserId] = useMutation(UPDATE_USER_ID, {
+    onCompleted: (data) => {
+      onUpdatedUserId(data.update_users);
+    },
+  });
+  const [updateBarberId] = useMutation(UPDATE_BARBER_ID, {
+    onCompleted: ({data}) => {
+      onUpdatedUserId(data.update_barbers);
+    },
+  });
 
-  // update user id from email to sub id for new users
-  if (state.user['custom:role'] === 'customer') {
-    updateUserId({
-      variables: {email: state.user.email, id: state.user.sub},
-    });
-  }
+  useEffect(() => {
+    // update user id from email to sub id for new users
+    if (state.user['custom:role'] === 'customer') {
+      updateUserId({
+        variables: {email: state.user.email, id: state.user.sub},
+      });
+    }
 
-  if (state.user['custom:role'] === 'barber') {
-    updateBarberId({
-      variables: {email: state.user.email, id: state.user.sub},
-    });
-  }
+    if (state.user['custom:role'] === 'barber') {
+      updateBarberId({
+        variables: {email: state.user.email, id: state.user.sub},
+      });
+    }
+  }, []);
 
-  // get the latest user data and save to context reducer
-  const updatedUser = _.get(
-    updatedUserData,
-    ['data', 'update_users', 'returning'],
-    [],
-  );
-  if (state.user['custom:role'] === 'customer' && updatedUser.length > 0) {
-    dispatch({type: 'saveUser', payload: updatedUser[0]});
-  }
-
-  const updatedBarber = _.get(
-    updatedBarberData,
-    ['data', 'update_users', 'returning'],
-    [],
-  );
-
-  if (state.user['custom:role'] === 'barber' && !updatedBarber) {
-    dispatch({type: 'saveUser', payload: updatedBarber[0]});
-  }
+  onUpdatedUserId = (data) => {
+    dispatch({type: 'saveUser', payload: data.returning[0]});
+  };
 
   return (
     <Tab.Navigator

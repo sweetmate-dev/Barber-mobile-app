@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {View} from 'react-native';
 import * as _ from 'lodash';
 import {RootView, BarView} from '../../../components/styled/View';
-import {H5} from '../../../components/styled/Text';
+import {H5, H6} from '../../../components/styled/Text';
 import {Colors} from '../../../themes';
 import {BarInput} from '../../../components/common';
 
@@ -58,11 +58,16 @@ const BookAdditionalInformation = ({barber, onChangeValues}) => {
     setInputs(temp);
   };
 
+  if (required_informations.filter((i) => barber[i.key]).length === 0) {
+    return null;
+  }
+
   return (
     <View style={{flex: 1}}>
       <H5 weight="bold" mt={10}>
         ADDITIONAL INFORMATION
       </H5>
+
       {required_informations.map((info) => {
         if (!barber[info.key]) return null;
         return (

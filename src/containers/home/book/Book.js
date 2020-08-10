@@ -28,7 +28,7 @@ const BookScreen = ({route, navigation}) => {
   return (
     <View style={{flex: 1, backgroundColor: Colors.background}}>
       <ABSView background={Colors.background} style={{opacity: 0.9}} />
-      <BarHeader title={<H5 weight="bold">APPOINTMENTS</H5>} />
+      <BarHeader title={<H5 weight="bold">APPOINTMENTS</H5>} hasBack={false} />
       {loading && (
         <BarView justify="center" align="center">
           <WaveIndicator color={Colors.text} />

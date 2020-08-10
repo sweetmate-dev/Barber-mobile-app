@@ -8,7 +8,7 @@ const BarberReviewScreen = () => {
   return (
     <RootView justify="flex-start">
       <H5 mt={30} color={Colors.placeholder}>
-        You have no reviews now
+        This barber has no reviews.
       </H5>
     </RootView>
   );
