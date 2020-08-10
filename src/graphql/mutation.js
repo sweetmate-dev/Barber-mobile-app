@@ -138,3 +138,29 @@ export const UPDATE_USER_PROFILE = gql`
     }
   }
 `;
+
+export const CANCEL_BOOKING = gql`
+  mutation CancelBooking($book_id: Int) {
+    delete_book_service(where: {book_id: {_eq: $book_id}}) {
+      returning {
+        book_id
+        service_id
+      }
+    }
+    delete_bookings(where: {id: {_eq: $book_id}}) {
+      returning {
+        id
+      }
+    }
+  }
+`;
+
+export const ADD_CUT = gql`
+  mutation AddCut($user_id: String!, $image: String!) {
+    insert_user_cuts(objects: {user_id: $user_id, image: $image}) {
+      returning {
+        id
+      }
+    }
+  }
+`;

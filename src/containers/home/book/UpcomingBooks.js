@@ -1,18 +1,54 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import {Alert} from 'react-native';
 import moment from 'moment';
-import ReadMore from 'react-native-read-more-text';
 import {FlatList} from 'react-native-gesture-handler';
+import {useMutation} from '@apollo/client';
 import {BarButton} from '../../../components/styled/Button';
 import {H5, H6, BarIcon} from '../../../components/styled/Text';
 import {RootView, BarView} from '../../../components/styled/View';
 import {Colors} from '../../../themes';
 import {BarImage} from '../../../components/common';
 import NavigationService from '../../../navigation/NavigationService';
+import {CANCEL_BOOKING} from '../../../graphql/mutation';
+import {GET_MY_BOOKINGS} from '../../../graphql/query';
+import {Context as AuthContext} from '../../../context/authContext';
 
 const UpcomingBookScreen = ({bookings}) => {
-  const cancelBook = (book) => {
-    alert('coming soon');
+  const {state} = useContext(AuthContext);
+  const [cancelBook] = useMutation(CANCEL_BOOKING, {
+    refetchQueries: [
+      {
+        query: GET_MY_BOOKINGS,
+        variables: {user_id: state.user.id},
+      },
+    ],
+  });
+  const onPressCancelBook = (book) => {
+    Alert.alert(
+      'Are you sure?',
+      'You want to cancel this book?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => {
+            console.log('Cancel Pressed');
+          },
+          style: 'cancel',
+        },
+        {
+          text: 'Yes',
+          onPress: () => {
+            // Cancel book
+            cancelBook({
+              variables: {book_id: book.id},
+            });
+          },
+        },
+      ],
+      {cancelable: false},
+    );
   };
+
   const onPressBook = (book) => {
     NavigationService.navigate('Booking', {
       services: book.barber.services,
@@ -62,7 +98,7 @@ const UpcomingBookScreen = ({bookings}) => {
           br={20}
           ml={10}
           mr={10}
-          onPress={() => cancelBook(book)}
+          onPress={() => onPressCancelBook(book)}
           background={Colors.outline}>
           <BarIcon type="AntDesign" name="close" color={Colors.background} />
         </BarButton>

@@ -81,3 +81,13 @@ export const GET_MY_BOOKINGS = gql`
     }
   }
 `;
+
+export const GET_MY_CUTS = gql`
+  query GetMyCuts($user_id: String!) {
+    user_cuts(where: {user_id: {_eq: $user_id}}) {
+      id
+      user_id
+      image
+    }
+  }
+`;

@@ -1,5 +1,6 @@
 import React from 'react';
 import {useQuery} from '@apollo/react-hooks';
+import {WaveIndicator} from 'react-native-indicators';
 import {H5, H6} from '../../components/styled/Text';
 import {RootView, BarContent, BarView} from '../../components/styled/View';
 import {Colors} from '../../themes';
@@ -8,7 +9,6 @@ import {BarButton} from '../../components/styled/Button';
 import NavigationService from '../../navigation/NavigationService';
 import {GET_BARBER_SERVICES} from '../../graphql/query';
 import {showAlert} from '../../services/operators';
-import {WaveIndicator} from 'react-native-indicators';
 
 const BarberServiceScreen = ({barber}) => {
   const {loading, error, data} = useQuery(GET_BARBER_SERVICES, {
