@@ -1,4 +1,4 @@
-import {Linking} from 'react-native';
+import {Linking, Alert} from 'react-native';
 import * as _ from 'lodash';
 import Toast from 'react-native-tiny-toast';
 import {Loading2} from '../assets/images';
@@ -24,6 +24,36 @@ export const showAlert = (text) => {
       color: 'black',
     },
   });
+};
+
+export const showConfirmAlert = (props, callback) => {
+  const params = {
+    title: 'Are you sure?',
+    cancelButton: 'Cancel',
+    okButton: 'Yes',
+    ...props,
+  };
+  Alert.alert(
+    params.title,
+    props.description,
+    [
+      {
+        text: params.cancelButton,
+        onPress: () => {
+          console.log('Cancel Pressed');
+        },
+        style: 'cancel',
+      },
+      {
+        text: params.okButton,
+        onPress: () => {
+          // Cancel book
+          callback();
+        },
+      },
+    ],
+    {cancelable: false},
+  );
 };
 
 export const showLoading = (text) => {

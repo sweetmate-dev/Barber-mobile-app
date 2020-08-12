@@ -1,9 +1,14 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {View, Dimensions} from 'react-native';
-import {useQuery} from '@apollo/react-hooks';
+import {useQuery, useMutation} from '@apollo/react-hooks';
 import LinearGradient from 'react-native-linear-gradient';
 import {TabBar, TabView, SceneMap} from 'react-native-tab-view';
-import {GET_BARBER_SERVICES} from '../../graphql/query';
+import * as _ from 'lodash';
+import {GET_BARBER_SERVICES, GET_FAVORITE_BARBERS} from '../../graphql/query';
+import {
+  ADD_FAVORITE_BARBER,
+  REMOVE_FAVORITE_BARBER,
+} from '../../graphql/mutation';
 import {BarView} from '../../components/styled/View';
 import {BarHeader, BarImage} from '../../components/common';
 import {H5} from '../../components/styled/Text';
@@ -11,15 +16,51 @@ import {dySize} from '../../utils/responsive';
 import BarberInfoScreen from '../barber/Info';
 import BarberReviewScreen from '../barber/Reviews';
 import BarberServiceScreen from '../barber/Services';
+import {Context as AuthContext} from '../../context/authContext';
 import {Colors} from '../../themes';
+import {hideLoading, showLoading} from '../../services/operators';
 
 const BarberProfile = ({route}) => {
   const {initialIndex} = route.params;
   const barber = route.params.barber;
+  const {state} = useContext(AuthContext);
   const [index, setIndex] = useState(initialIndex || 0);
+
+  const MyFavoriteBarbers = useQuery(GET_FAVORITE_BARBERS, {
+    variables: {user_id: state.user.id},
+  });
   const getBarberServices = useQuery(GET_BARBER_SERVICES, {
     variables: {barberId: barber.id},
   });
+  const favorite_barbers = _.get(
+    MyFavoriteBarbers,
+    ['data', 'favorite_barbers'],
+    [],
+  );
+
+  const [addFavoriteBarber] = useMutation(ADD_FAVORITE_BARBER, {
+    refetchQueries: [
+      {
+        query: GET_FAVORITE_BARBERS,
+        variables: {user_id: state.user.id},
+      },
+    ],
+    onCompleted: (data) => {
+      hideLoading();
+    },
+  });
+  const [removeFavoriteBarber] = useMutation(REMOVE_FAVORITE_BARBER, {
+    refetchQueries: [
+      {
+        query: GET_FAVORITE_BARBERS,
+        variables: {user_id: state.user.id},
+      },
+    ],
+    onCompleted: (data) => {
+      hideLoading();
+    },
+  });
+
   const routes = [
     {key: 'info', title: 'INFO'},
     {key: 'reviews', title: '★★★★★'},
@@ -30,13 +71,37 @@ const BarberProfile = ({route}) => {
     getBarberServices.refetch();
   }, []);
 
+  toggleBookmark = () => {
+    console.log({MyFavoriteBarbers});
+    const find = favorite_barbers.find((i) => i.barber.id === barber.id);
+    if (find) {
+      // remove from favorite
+      showLoading('Removing bookmark...');
+      removeFavoriteBarber({variables: {id: find.id}});
+    } else {
+      // add to favorite
+      showLoading('Adding bookmark...');
+      addFavoriteBarber({
+        variables: {
+          user_id: state.user.id,
+          barber_id: barber.id,
+        },
+      });
+    }
+  };
+
   return (
     <View style={{flex: 1, backgroundColor: Colors.background}}>
       <BarHeader
         title={<H5 weight="bold">Barber Profile</H5>}
         hasRight
-        rightIconType="AntDesign"
-        rightIcon="pushpin"
+        rightIconType="Ionicons"
+        rightIcon={
+          favorite_barbers.find((i) => i.barber.id === barber.id)
+            ? 'md-star'
+            : 'md-star-outline'
+        }
+        onPressRight={toggleBookmark}
       />
       <BarView align="center">
         <BarImage image={{uri: barber.avatar}} width={355} height={160} />

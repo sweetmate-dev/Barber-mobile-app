@@ -1,5 +1,4 @@
 import React, {useContext} from 'react';
-import {Alert} from 'react-native';
 import moment from 'moment';
 import {FlatList} from 'react-native-gesture-handler';
 import {useMutation} from '@apollo/client';
@@ -12,6 +11,7 @@ import NavigationService from '../../../navigation/NavigationService';
 import {CANCEL_BOOKING} from '../../../graphql/mutation';
 import {GET_MY_BOOKINGS} from '../../../graphql/query';
 import {Context as AuthContext} from '../../../context/authContext';
+import {showConfirmAlert} from '../../../services/operators';
 
 const UpcomingBookScreen = ({bookings}) => {
   const {state} = useContext(AuthContext);
@@ -24,29 +24,11 @@ const UpcomingBookScreen = ({bookings}) => {
     ],
   });
   const onPressCancelBook = (book) => {
-    Alert.alert(
-      'Are you sure?',
-      'You want to cancel this book?',
-      [
-        {
-          text: 'Cancel',
-          onPress: () => {
-            console.log('Cancel Pressed');
-          },
-          style: 'cancel',
-        },
-        {
-          text: 'Yes',
-          onPress: () => {
-            // Cancel book
-            cancelBook({
-              variables: {book_id: book.id},
-            });
-          },
-        },
-      ],
-      {cancelable: false},
-    );
+    showConfirmAlert({description: 'You want to cancel this book?'}, () => {
+      cancelBook({
+        variables: {book_id: book.id},
+      });
+    });
   };
 
   const onPressBook = (book) => {

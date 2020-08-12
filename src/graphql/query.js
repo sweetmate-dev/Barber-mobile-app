@@ -91,3 +91,26 @@ export const GET_MY_CUTS = gql`
     }
   }
 `;
+
+export const GET_FAVORITE_BARBERS = gql`
+  query GetFavoriteBarbers($user_id: String!) {
+    favorite_barbers(where: {user_id: {_eq: $user_id}}) {
+      id
+      barber {
+        id
+        name
+        title
+        location
+        avatar
+        phone
+        email
+        requirePhoneNumber
+        requireStreetAddress
+        requireCity
+        requireState
+        requireZipCode
+        requireHowFind
+      }
+    }
+  }
+`;

@@ -1,22 +1,21 @@
 import React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import {BarImage} from '../../../components/common';
-import {BarView} from '../../../components/styled/View';
 import {H5} from '../../../components/styled/Text';
 import {dySize} from '../../../utils/responsive';
-import {Welcome, Jacket} from '../../../assets/images';
+import {BarButton} from '../../../components/styled/Button';
 
-const MyBarberItem = ({user}) => {
+const MyBarberItem = ({user, ...props}) => {
   return (
-    <BarView
-      key={user.id}
+    <BarButton
       width={170}
       height={170}
       mr={4}
       ml={4}
       justify="center"
-      align="center">
-      <BarImage width={170} height={170} image={user.image} />
+      align="center"
+      {...props}>
+      <BarImage width={170} height={170} image={{uri: user.avatar}} />
       <LinearGradient
         colors={['#00000055', '#000000CC', '#000000FF']}
         style={{
@@ -28,10 +27,10 @@ const MyBarberItem = ({user}) => {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <BarImage round image={user.image} width={70} height={70} />
+        <BarImage round image={{uri: user.avatar}} width={70} height={70} />
         <H5 weight="bold">{user.name}</H5>
       </LinearGradient>
-    </BarView>
+    </BarButton>
   );
 };
 

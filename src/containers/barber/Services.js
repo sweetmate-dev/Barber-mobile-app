@@ -61,7 +61,7 @@ const BarberServiceScreen = ({barber}) => {
                 <H6>{service.description}</H6>
               </BarView>
               <H5 color={Colors.outline} mr={10}>
-                ${service.price}
+                ￡{service.price}
               </H5>
             </BarButton>
           ))}

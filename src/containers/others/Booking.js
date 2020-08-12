@@ -245,7 +245,7 @@ const Booking = ({route}) => {
                 <H5>{service.name}</H5>
                 <H6 color={Colors.placeholder}>{service.duration} minutes</H6>
               </BarView>
-              <H5 color={Colors.outline}>${service.price}</H5>
+              <H5 color={Colors.outline}>￡{service.price}</H5>
             </BarButton>
           );
         })}

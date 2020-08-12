@@ -164,3 +164,35 @@ export const ADD_CUT = gql`
     }
   }
 `;
+
+export const REMOVE_CUT = gql`
+  mutation RemoveCut($id: Int!) {
+    delete_user_cuts(where: {id: {_eq: $id}}) {
+      returning {
+        id
+      }
+    }
+  }
+`;
+
+export const ADD_FAVORITE_BARBER = gql`
+  mutation AddFavoriteBarber($user_id: String!, $barber_id: String!) {
+    insert_favorite_barbers(
+      objects: {user_id: $user_id, barber_id: $barber_id}
+    ) {
+      returning {
+        id
+      }
+    }
+  }
+`;
+
+export const REMOVE_FAVORITE_BARBER = gql`
+  mutation RemoveFavoriteBarber($id: Int!) {
+    delete_favorite_barbers(where: {id: {_eq: $id}}) {
+      returning {
+        id
+      }
+    }
+  }
+`;

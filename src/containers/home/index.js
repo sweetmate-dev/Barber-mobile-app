@@ -1,5 +1,5 @@
 import React, {useEffect, useContext} from 'react';
-import {useMutation} from '@apollo/client';
+import {useMutation, useQuery} from '@apollo/client';
 import * as _ from 'lodash';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Icon} from 'native-base';
@@ -10,11 +10,16 @@ import SettingStack from './settings';
 import {Colors} from '../../themes';
 import {Context as AuthContext} from '../../context/authContext';
 import {UPDATE_USER_ID, UPDATE_BARBER_ID} from '../../graphql/mutation';
+import {GET_FAVORITE_BARBERS} from '../../graphql/query';
 
 const Tab = createBottomTabNavigator();
 
 const TabStack = () => {
   const {state, dispatch} = useContext(AuthContext);
+  useQuery(GET_FAVORITE_BARBERS, {
+    variables: {user_id: state.user.id},
+  });
+
   const [updateUserId] = useMutation(UPDATE_USER_ID, {
     onCompleted: (data) => {
       onUpdatedUserId(data.update_users);

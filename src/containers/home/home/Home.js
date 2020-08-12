@@ -1,9 +1,11 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
+import {Modal} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import ImagePicker from 'react-native-image-crop-picker';
 import {useQuery, useMutation} from '@apollo/client';
 import {WaveIndicator} from 'react-native-indicators';
-import {H5, BarIcon} from '../../../components/styled/Text';
+import ImageViewer from 'react-native-image-zoom-viewer';
+import {H5, H6, BarIcon} from '../../../components/styled/Text';
 import {RootView, BarContent, BarView} from '../../../components/styled/View';
 import {BarButton} from '../../../components/styled/Button';
 import {BarHeader, BarImage} from '../../../components/common';
@@ -13,28 +15,25 @@ import {Colors} from '../../../themes';
 import NavigationService from '../../../navigation/NavigationService';
 import MyBarberItem from './MyBarberItem';
 import {Context as AuthContext} from '../../../context/authContext';
-import {showLoading, hideLoading} from '../../../services/operators';
-import {ADD_CUT} from '../../../graphql/mutation';
-import {GET_MY_CUTS} from '../../../graphql/query';
+import {
+  showLoading,
+  hideLoading,
+  showConfirmAlert,
+} from '../../../services/operators';
+import {ADD_CUT, REMOVE_CUT} from '../../../graphql/mutation';
+import {GET_MY_CUTS, GET_FAVORITE_BARBERS} from '../../../graphql/query';
 import API from '../../../services/api';
-
-const MyBarbers = [
-  {
-    id: 1,
-    image: Jacket,
-    name: 'Matthew Sadler',
-  },
-  {
-    id: 2,
-    image: Face,
-    name: 'Cintia Yasuo',
-  },
-];
 
 const HomeScreen = () => {
   const {state} = useContext(AuthContext);
+
   if (!state.user.id) return <RootView justify="flex-start"></RootView>;
+  const [visibleIndex, setVisibleIndex] = useState(-1); // cut gallaxy visibility
+
   const MyCuts = useQuery(GET_MY_CUTS, {variables: {user_id: state.user.id}});
+  const MyFavoriteBarbers = useQuery(GET_FAVORITE_BARBERS, {
+    variables: {user_id: state.user.id},
+  });
   const [addCutImage] = useMutation(ADD_CUT, {
     refetchQueries: [
       {
@@ -46,6 +45,18 @@ const HomeScreen = () => {
       hideLoading();
     },
   });
+  const [removeCutImage] = useMutation(REMOVE_CUT, {
+    refetchQueries: [
+      {
+        query: GET_MY_CUTS,
+        variables: {user_id: state.user.id},
+      },
+    ],
+    onCompleted: (data) => {
+      hideLoading();
+    },
+  });
+
   const onPressAddCut = () => {
     // open image picker
     ImagePicker.openPicker({
@@ -62,6 +73,21 @@ const HomeScreen = () => {
       addCutImage({variables: {user_id: state.user.id, image: avatarUrl}});
     });
   };
+
+  const onPressDeleteCut = (cut) => {
+    showConfirmAlert(
+      {description: 'You want to remove this cut image?'},
+      () => {
+        showLoading('Removing picture...');
+        removeCutImage({variables: {id: cut.id}});
+      },
+    );
+  };
+
+  onPressFavoriteBarber = (barber) => {
+    NavigationService.navigate('BarberProfile', {barber});
+  };
+
   return (
     <RootView justify="flex-start">
       <BarHeader
@@ -98,9 +124,20 @@ const HomeScreen = () => {
         </BarView>
 
         <BarView row wrap>
-          {MyBarbers.map((barber) => (
-            <MyBarberItem key={barber.id} user={barber} />
-          ))}
+          {MyFavoriteBarbers.data &&
+            MyFavoriteBarbers.data.favorite_barbers.map((item) => (
+              <MyBarberItem
+                key={item.id}
+                user={item.barber}
+                onPress={() => onPressFavoriteBarber(item.barber)}
+              />
+            ))}
+          {MyFavoriteBarbers.data &&
+            MyFavoriteBarbers.data.favorite_barbers.length === 0 && (
+              <H6 color={Colors.placeholder} mb={20}>
+                No favorite barbers
+              </H6>
+            )}
         </BarView>
 
         <BarView row justify="space-between" align="center">
@@ -117,13 +154,64 @@ const HomeScreen = () => {
           )}
           {!MyCuts.loading &&
             MyCuts.data &&
-            MyCuts.data.user_cuts.map((cut) => (
+            MyCuts.data.user_cuts.map((cut, index) => (
               <BarView mr={4} ml={4} key={cut.id}>
-                <BarImage image={{uri: cut.image}} width={170} height={170} />
+                <BarButton
+                  width={170}
+                  height={170}
+                  onPress={() => setVisibleIndex(index)}>
+                  <BarImage image={{uri: cut.image}} width={170} height={170} />
+                </BarButton>
+                <BarButton
+                  width={30}
+                  height={30}
+                  br={15}
+                  padding={1}
+                  background={Colors.background}
+                  onPress={() => onPressDeleteCut(cut)}
+                  style={{
+                    position: 'absolute',
+                    left: 10,
+                    top: 10,
+                  }}>
+                  <BarIcon
+                    type="AntDesign"
+                    name="delete"
+                    color={Colors.outline}
+                    margin={1}
+                    size={15}
+                  />
+                </BarButton>
               </BarView>
             ))}
         </BarView>
       </BarContent>
+      {!MyCuts.loading && MyCuts.data && (
+        <Modal visible={visibleIndex > -1} transparent={true}>
+          <ImageViewer
+            imageUrls={MyCuts.data.user_cuts.map((i) => ({
+              url: i.image,
+            }))}
+            index={visibleIndex}
+            onCancel={() => setVisibleIndex(-1)}
+            enablePreload
+          />
+          <BarButton
+            width={60}
+            height={60}
+            br={30}
+            padding={1}
+            background={Colors.background}
+            onPress={() => setVisibleIndex(-1)}
+            style={{
+              position: 'absolute',
+              right: 10,
+              top: 15,
+            }}>
+            <BarIcon type="AntDesign" name="close" margin={1} />
+          </BarButton>
+        </Modal>
+      )}
     </RootView>
   );
 };
