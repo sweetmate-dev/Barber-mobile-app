@@ -27,8 +27,10 @@ const BarImage = ({
   resizeMode = 'cover',
   br = 0,
 }) => {
-  const [loading, setLoading] = useState(image !== null);
-  const [loadError, setLoadError] = useState(false);
+  const [loading, setLoading] = useState(
+    image !== null && image.uri.length > 0,
+  );
+  const [loadError, setLoadError] = useState(!loading);
 
   const defaultImage = type === 'avatar' ? DefaultAvatar : DefaultPicture;
   const imageStyle = {
@@ -51,13 +53,15 @@ const BarImage = ({
         {loading && <Progress.Circle size={30} indeterminate />}
         {loadError && <FastImage source={defaultImage} style={imageStyle} />}
       </ProgressWrapper>
-      <FastImage
-        style={imageStyle}
-        onLoadEnd={() => setLoading(false)}
-        onError={() => setLoadError(true)}
-        source={image}
-        resizeMode={FastImage.resizeMode[resizeMode]}
-      />
+      {image.uri.length > 0 && (
+        <FastImage
+          style={imageStyle}
+          onLoadEnd={() => setLoading(false)}
+          onError={() => setLoadError(true)}
+          source={image}
+          resizeMode={FastImage.resizeMode[resizeMode]}
+        />
+      )}
     </BarView>
   );
 };
