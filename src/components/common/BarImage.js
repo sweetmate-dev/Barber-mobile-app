@@ -53,7 +53,6 @@ const BarImage = ({
       </ProgressWrapper>
       <FastImage
         style={imageStyle}
-        onLoad={(event) => alert('hi')}
         onLoadEnd={() => setLoading(false)}
         onError={() => setLoadError(true)}
         source={image}
