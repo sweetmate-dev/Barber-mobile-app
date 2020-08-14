@@ -6,6 +6,7 @@ import {ApolloClient, InMemoryCache} from '@apollo/client';
 import {Container} from 'native-base';
 import RootNavigator from './RootNavigation';
 import {Context as AuthContext} from '../context/authContext';
+import {Colors} from '../themes';
 
 const AppWithNav = () => {
   const [appState, setAppState] = useState(AppState.currentState);
@@ -40,7 +41,7 @@ const AppWithNav = () => {
 
   return (
     <ApolloProvider client={makeApolloClient(state.JWTToken)}>
-      <Container>
+      <Container style={{backgroundColor: Colors.background}}>
         <RootNavigator />
       </Container>
     </ApolloProvider>

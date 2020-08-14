@@ -1,4 +1,5 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {useQuery} from '@apollo/react-hooks';
@@ -11,12 +12,29 @@ import BookingDateScreen from '../containers/others/BookingDate';
 import EditAccountScreen from '../containers/others/EditAccount';
 import {Context as AuthContext} from '../context/authContext';
 import {GET_MY_BOOKINGS, GET_BARBERS} from '../graphql/query';
+import {showLoading, hideLoading} from '../services/operators';
 
 const Stack = createStackNavigator();
 
 const RootNavigator = () => {
-  const {state} = useContext(AuthContext);
+  const {state, dispatch} = useContext(AuthContext);
   const [tabIndex, setTabIndex] = useState(0);
+  const [token, setToken] = useState('loading');
+  useEffect(async () => {
+    const token = await AsyncStorage.getItem('token');
+    const user = await AsyncStorage.getItem('user');
+    if (user) dispatch({type: 'saveUser', payload: JSON.parse(user)});
+    if (!token) setToken('');
+    else {
+      showLoading('Loading...');
+      dispatch({type: 'saveJWTToken', payload: token});
+      setTimeout(() => {
+        hideLoading();
+        setToken(token || '');
+      }, 1500);
+    }
+  }, []);
+
   const getMyBooks = useQuery(GET_MY_BOOKINGS, {
     variables: {user_id: state.user.id},
   });
@@ -45,11 +63,14 @@ const RootNavigator = () => {
       // screens which are not in tab stack
     }
   };
+  if (token === 'loading') return null;
   return (
     <NavigationContainer
       ref={(ref) => NavigationService.setNavigator(ref)}
       onStateChange={onStateChanged}>
-      <Stack.Navigator headerMode="none">
+      <Stack.Navigator
+        headerMode="none"
+        initialRouteName={token.length > 0 ? 'TabStack' : 'AuthStack'}>
         <Stack.Screen name="AuthStack" component={AuthStack} />
         <Stack.Screen name="TabStack" component={TabStack} />
         <Stack.Screen name="BarberProfile" component={BarberProfile} />

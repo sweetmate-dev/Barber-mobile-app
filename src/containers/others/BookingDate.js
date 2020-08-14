@@ -3,9 +3,9 @@ import {View} from 'react-native';
 import moment from 'moment';
 import * as _ from 'lodash';
 import {CalendarList} from 'react-native-calendars';
-import {RootView, BarContent, BarView} from '../../components/styled/View';
-import {BarHeader, BarActionButton} from '../../components/common';
-import {H5, BarIcon} from '../../components/styled/Text';
+import {RootView} from '../../components/styled/View';
+import {BarHeader} from '../../components/common';
+import {H5} from '../../components/styled/Text';
 import {dySize} from '../../utils/responsive';
 import {Colors} from '../../themes';
 import {FlatList} from 'react-native-gesture-handler';
@@ -15,7 +15,7 @@ import NavigationService from '../../navigation/NavigationService';
 
 const WORK_DAYS_TIMES = {
   3: [7, 8, 9, 10, 11, 14, 15, 16, 17, 18],
-  5: [8, 9, 10, 11, 12, 15, 16, 17, 18],
+  5: [4, 5, 6, 8, 9, 10, 11, 12, 15, 16, 17, 18],
   6: [9, 10, 11, 14, 15, 16, 17, 18, 19, 20],
   0: [7, 8, 9, 10, 11, 12, 14, 15, 16, 17],
 };
@@ -62,19 +62,18 @@ const BookingDate = ({route}) => {
 
   onSelectDate = (dateString) => {
     // if today is unavailable day, show the nearest available day
+
     const WN = new Date(dateString).getDay();
     const slots = WORK_DAYS_TIMES[WN];
     if (!slots) {
       setDate(null);
       return;
     }
-    setAvailalbeSlots(slots);
-
-    // check if changed slots have current slot
     const h = Math.floor(selectedSlot);
-    console.log({slots, h});
-    if (slots.indexOf(h) < 0 || slots.indexOf(h + 1) < 0)
-      setSelectedSlot(WORK_DAYS_TIMES[WN][0]);
+    if (slots.indexOf(h) < 0 || slots.indexOf(h + 1) < 0) {
+      setSelectedSlot(0);
+    }
+    setAvailalbeSlots(slots);
   };
 
   onSelectSlot = (slot) => {
@@ -82,6 +81,10 @@ const BookingDate = ({route}) => {
   };
 
   onPressBack = () => {
+    NavigationService.goBack();
+  };
+
+  onPressRight = () => {
     route.params.onSelectBookingDate(date, selectedSlot);
     NavigationService.goBack();
   };
@@ -89,10 +92,18 @@ const BookingDate = ({route}) => {
   const renderSlot = ({item}) => {
     const slot = item;
     if (availableSlots.indexOf(slot + 1) < 0) return;
+
     return (
       <>
         {_.range(1 / slotInterval).map((s, index) => {
           const slotValue = slot + index * slotInterval;
+
+          // hide past time for today bookings
+          if (
+            new Date().getTime() >
+            new Date(moment(date).local()).getTime() + slotValue * 3600 * 1000
+          )
+            return null;
           return (
             <BarButton
               onPress={() => onSelectSlot(slotValue)}
@@ -118,12 +129,15 @@ const BookingDate = ({route}) => {
       </>
     );
   };
-
   return (
     <RootView justify="flex-start">
       <BarHeader
         title={<H5 weight="bold">DATE & TIME</H5>}
         onPressBack={onPressBack}
+        hasRight={selectedSlot > 0}
+        rightIcon="check"
+        rightIconType="AntDesign"
+        onPressRight={onPressRight}
       />
       <View style={{height: dySize(320)}}>
         <CalendarList

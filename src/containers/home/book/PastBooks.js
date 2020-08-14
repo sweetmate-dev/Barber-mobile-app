@@ -37,7 +37,7 @@ const PastBookScreen = ({bookings}) => {
           style={{flex: 1}}>
           <BarImage image={{uri: barber.avatar}} width={60} height={60} round />
           <BarView ml={10} style={{flex: 1}}>
-            <H5 pv={2}>{moment(book.time).fromNow()}</H5>
+            <H5 pv={2}>{moment(book.time).format('YYYY-MM-DD HH:mm A')}</H5>
             <H6 pv={2} color={Colors.outline}>
               {barber.name}
             </H6>

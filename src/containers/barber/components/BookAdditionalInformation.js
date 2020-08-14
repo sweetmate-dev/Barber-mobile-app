@@ -1,10 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {View} from 'react-native';
 import * as _ from 'lodash';
 import {RootView, BarView} from '../../../components/styled/View';
 import {H5, H6} from '../../../components/styled/Text';
 import {Colors} from '../../../themes';
 import {BarInput} from '../../../components/common';
+import {Context as AuthContext} from '../../../context/authContext';
 
 const required_informations = [
   {
@@ -41,7 +42,8 @@ const required_informations = [
 ];
 
 const BookAdditionalInformation = ({barber, onChangeValues}) => {
-  const [inputs, setInputs] = useState({});
+  const {state} = useContext(AuthContext);
+  const [inputs, setInputs] = useState({requirePhoneNumber: state.user.phone});
   useEffect(() => {
     let error = [];
     required_informations.map((info) => {

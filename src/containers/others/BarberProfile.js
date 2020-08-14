@@ -95,11 +95,11 @@ const BarberProfile = ({route}) => {
       <BarHeader
         title={<H5 weight="bold">Barber Profile</H5>}
         hasRight
-        rightIconType="Ionicons"
+        rightIconType="AntDesign"
         rightIcon={
           favorite_barbers.find((i) => i.barber.id === barber.id)
-            ? 'md-star'
-            : 'md-star-outline'
+            ? 'star'
+            : 'staro'
         }
         onPressRight={toggleBookmark}
       />

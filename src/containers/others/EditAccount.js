@@ -19,7 +19,7 @@ const EditAccountScreen = () => {
 
   const [name, setName] = useState(state.user.name);
   const [email, setEmail] = useState(state.user.email);
-  const [phone, setPhone] = useState(state.user.phone);
+  const [phone, setPhone] = useState(state.user.phone || '');
   const [image, setImageUrl] = useState(state.user.avatar);
 
   onToggleImage = () => {

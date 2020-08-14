@@ -11,7 +11,8 @@ import {dySize} from '../../utils/responsive';
 
 const HeaderWrapper = styled(Header)`
   width: ${dySize(375)};
-  height: auto;
+  height: ${dySize(50)};
+  padding-top: 10px;
   background-color: transparent;
   border-bottom-width: 0px;
   elevation: 0;
@@ -54,13 +55,13 @@ const BarHeader = ({
   headerIcon,
   rightText = '',
   rightIcon = '',
-  leftIcon = 'ios-arrow-back',
+  leftIcon = 'left',
   leftIconSize = 20,
   rightImage,
   rightIconType = 'Ionicons',
   rightIconSize = 20,
   rightIconColor,
-  leftIconType = 'Ionicons',
+  leftIconType = 'AntDesign',
   onPressRight = () => undefined,
   onPressBack = () => NavigationService.goBack(),
   style = {},

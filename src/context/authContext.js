@@ -1,4 +1,5 @@
 import {Auth} from 'aws-amplify';
+import AsyncStorage from '@react-native-community/async-storage';
 import createDataContext from './createDataContext';
 import {showAlert, showLoading, hideLoading} from '../services/operators';
 import NavigationService from '../navigation/NavigationService';
@@ -40,10 +41,11 @@ export const signIn = (dispatch) => {
         // get Cognito tokens from current session
         const session = user.signInUserSession;
         const {idToken, refreshToken} = session;
-        console.log('attributes: ', user.attributes);
         dispatch({type: 'saveJWTToken', payload: idToken.jwtToken});
         dispatch({type: 'saveRefreshToken', payload: refreshToken.token});
         dispatch({type: 'saveUser', payload: user.attributes});
+        AsyncStorage.setItem('token', idToken.jwtToken);
+        AsyncStorage.setItem('user', JSON.stringify(user.attributes));
         hideLoading();
         NavigationService.navigate('TabStack');
       })

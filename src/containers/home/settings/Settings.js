@@ -1,5 +1,6 @@
 import React from 'react';
 import {Platform} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import {H5, H6} from '../../../components/styled/Text';
 import {RootView, BarContent} from '../../../components/styled/View';
 import {BarHeader, BarItemButton} from '../../../components/common';
@@ -18,7 +19,14 @@ const SettingScreen = () => {
           onPress={() => NavigationService.navigate('EditAccount')}
         />
         <BarItemButton text="Change Password" icon="key" />
-        <BarItemButton text="Log Out" icon="logout" />
+        <BarItemButton
+          text="Log Out"
+          icon="logout"
+          onPress={async () => {
+            await AsyncStorage.clear();
+            NavigationService.reset('AuthStack');
+          }}
+        />
         <H6 weight="bold" mt={10}>
           PAYMENT
         </H6>

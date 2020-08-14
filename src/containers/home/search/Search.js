@@ -53,12 +53,12 @@ const SearchScreen = () => {
       <Header
         style={{
           width: dySize(375),
-          height: 45,
+          height: dySize(60),
           backgroundColor: Colors.background,
           justifyContent: 'center',
           borderBottomWidth: 0,
         }}>
-        <BarView width={355}>
+        <BarView width={355} justify="center">
           <BarSearchInput
             onRef={(ref) => setSearchInput(ref)}
             onFocus={onFocusSearch}

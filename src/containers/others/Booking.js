@@ -186,7 +186,7 @@ const Booking = ({route}) => {
         keyboardShouldPersistTaps="always"
         contentContainerStyle={{
           padding: dySize(10),
-          paddingBottom: dySize(60),
+          paddingBottom: dySize(100),
         }}>
         <BarberItem user={barber} hasCallButton />
         <BarView background={Colors.card} ph={10}>

@@ -25,8 +25,8 @@ const LoginScreen = () => {
       <Formik
         validationSchema={validationSchema}
         initialValues={{
-          email: 'litiyan2015@gmail.com',
-          password: 'Test1234',
+          email: 'John@amuesi.com',
+          password: '123456789',
         }}
         onSubmit={(values) => login(values)}
         render={({
