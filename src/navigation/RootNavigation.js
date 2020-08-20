@@ -36,7 +36,7 @@ const RootNavigator = () => {
   }, []);
 
   const getMyBooks = useQuery(GET_MY_BOOKINGS, {
-    variables: {user_id: state.user.id},
+    variables: {user_id: state.user ? state.user.id : ''},
   });
   const searchBarbers = useQuery(GET_BARBERS);
 

@@ -25,8 +25,8 @@ const LoginScreen = () => {
       <Formik
         validationSchema={validationSchema}
         initialValues={{
-          email: 'John@amuesi.com',
-          password: '123456789',
+          email: 'yasuom817@gmail.com',
+          password: 'Test!@34',
         }}
         onSubmit={(values) => login(values)}
         render={({
@@ -44,6 +44,7 @@ const LoginScreen = () => {
               onChangeText={handleChange('email')}
               onBlur={handleBlur('email')}
               value={values.email}
+              autoCapitalize="none"
               errorText={submitCount > 0 ? errors.email : ''}
             />
             <BarInput
@@ -53,6 +54,7 @@ const LoginScreen = () => {
               value={values.password}
               errorText={submitCount > 0 ? errors.password : ''}
               secureTextEntry
+              autoCapitalize="none"
             />
             <BarActionButton text="LOG IN" mt={10} onPress={handleSubmit} />
           </View>

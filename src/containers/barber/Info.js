@@ -91,7 +91,7 @@ const BarberInfoScreen = ({barber}) => {
             color={Colors.outline}
           />
           <H6 style={{flex: 1}}>{barber.phone || 'No phone number'}</H6>
-          {barber.phone.length > 0 && (
+          {barber.phone && barber.phone.length > 0 && (
             <>
               <BarIconButton onPress={callBarber} icon="phone" mr={10} />
               <BarIconButton onPress={chatBarber} icon="message1" />

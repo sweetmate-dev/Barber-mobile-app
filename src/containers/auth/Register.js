@@ -40,11 +40,11 @@ const RegisterScreen = () => {
       <Formik
         validationSchema={validationSchema}
         initialValues={{
-          firstName: 'Tiyan',
-          lastName: 'Li',
-          email: 'litiyan2015@gmail.com',
-          password: 'Test1234',
-          confirm: 'Test1234',
+          firstName: 'Matthew',
+          lastName: 'Sadler',
+          email: 'yasuom817@gmail.com',
+          password: 'Test!@34',
+          confirm: 'Test!@34',
         }}
         onSubmit={(values) => register(values)}
         render={({
@@ -81,6 +81,7 @@ const RegisterScreen = () => {
               onBlur={handleBlur('email')}
               value={values.email}
               errorText={submitCount > 0 ? errors.email : ''}
+              autoCapitalize="none"
             />
             <BarInput
               label="Password"
@@ -89,6 +90,7 @@ const RegisterScreen = () => {
               value={values.password}
               errorText={submitCount > 0 ? errors.password : ''}
               secureTextEntry
+              autoCapitalize="none"
             />
             <BarInput
               label="Confirm Password"
@@ -97,6 +99,7 @@ const RegisterScreen = () => {
               value={values.confirm}
               errorText={submitCount > 0 ? errors.confirm : ''}
               secureTextEntry
+              autoCapitalize="none"
             />
             <BarView
               row

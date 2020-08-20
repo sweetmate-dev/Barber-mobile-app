@@ -100,7 +100,12 @@ const HomeScreen = () => {
       <BarContent
         style={{padding: dySize(10)}}
         contentContainerStyle={{paddingBottom: 100}}>
-        <BarImage image={{uri: state.user.avatar}} width={355} height={250} />
+        <BarImage
+          image={{uri: state.user.avatar}}
+          width={355}
+          height={250}
+          type="avatar"
+        />
         <LinearGradient
           colors={['#00000055', '#000000CC', '#000000FF']}
           style={{
@@ -112,7 +117,7 @@ const HomeScreen = () => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <BarImage round image={{uri: state.user.avatar}} />
+          <BarImage round image={{uri: state.user.avatar}} type="avatar" />
           <H5 weight="bold">{state.user.name}</H5>
         </LinearGradient>
 

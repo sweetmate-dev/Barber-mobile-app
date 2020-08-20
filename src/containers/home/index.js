@@ -11,6 +11,7 @@ import {Colors} from '../../themes';
 import {Context as AuthContext} from '../../context/authContext';
 import {UPDATE_USER_ID, UPDATE_BARBER_ID} from '../../graphql/mutation';
 import {GET_FAVORITE_BARBERS} from '../../graphql/query';
+import NavigationService from '../../navigation/NavigationService';
 
 const Tab = createBottomTabNavigator();
 
@@ -47,7 +48,11 @@ const TabStack = () => {
   }, []);
 
   onUpdatedUserId = (data) => {
-    dispatch({type: 'saveUser', payload: data.returning[0]});
+    if (data.returning.length > 0) {
+      dispatch({type: 'saveUser', payload: data.returning[0]});
+    } else {
+      NavigationService.reset('AuthStack');
+    }
   };
 
   return (

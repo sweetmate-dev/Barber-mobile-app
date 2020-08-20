@@ -23,10 +23,7 @@ const AuthScreen = ({route, navigation}) => {
         <BarImage image={Background1} style={{height: '100%', width: '100%'}} />
       </ABSView>
       <ABSView background={Colors.background} style={{opacity: 0.9}} />
-      <BarHeader
-        title={<BarImage image={AppLogo} width={240} height={70} />}
-        leftIcon="ios-arrow-back"
-      />
+      <BarHeader title={<BarImage image={AppLogo} width={240} height={70} />} />
       <TabView
         navigationState={{index, routes}}
         renderScene={SceneMap({
