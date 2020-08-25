@@ -9,13 +9,13 @@ import SearchStack from './search';
 import SettingStack from './settings';
 import {Colors} from '../../themes';
 import {Context as AuthContext} from '../../context/authContext';
-import {UPDATE_USER_ID, UPDATE_BARBER_ID} from '../../graphql/mutation';
+import {UPDATE_USER_ID} from '../../graphql/mutation';
 import {GET_FAVORITE_BARBERS} from '../../graphql/query';
 import NavigationService from '../../navigation/NavigationService';
 
 const Tab = createBottomTabNavigator();
 
-const TabStack = () => {
+const CustomerTabStack = () => {
   const {state, dispatch} = useContext(AuthContext);
   useQuery(GET_FAVORITE_BARBERS, {
     variables: {user_id: state.user.id},
@@ -26,25 +26,12 @@ const TabStack = () => {
       onUpdatedUserId(data.update_users);
     },
   });
-  const [updateBarberId] = useMutation(UPDATE_BARBER_ID, {
-    onCompleted: ({data}) => {
-      onUpdatedUserId(data.update_barbers);
-    },
-  });
 
   useEffect(() => {
     // update user id from email to sub id for new users
-    if (state.user['custom:role'] === 'customer') {
-      updateUserId({
-        variables: {email: state.user.email, id: state.user.sub},
-      });
-    }
-
-    if (state.user['custom:role'] === 'barber') {
-      updateBarberId({
-        variables: {email: state.user.email, id: state.user.sub},
-      });
-    }
+    updateUserId({
+      variables: {email: state.user.email, id: state.user.sub},
+    });
   }, []);
 
   onUpdatedUserId = (data) => {
@@ -112,4 +99,4 @@ const TabStack = () => {
   );
 };
 
-export default TabStack;
+export default CustomerTabStack;

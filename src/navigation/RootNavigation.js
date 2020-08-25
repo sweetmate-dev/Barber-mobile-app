@@ -5,7 +5,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {useQuery} from '@apollo/react-hooks';
 import NavigationService from './NavigationService';
 import AuthStack from '../containers/auth';
-import TabStack from '../containers/home';
+import CustomerTabStack from '../containers/home_customer';
+import BarberTabStack from '../containers/home_barber';
 import BarberProfile from '../containers/others/BarberProfile';
 import BookingScreen from '../containers/others/Booking';
 import BookingDateScreen from '../containers/others/BookingDate';
@@ -64,15 +65,20 @@ const RootNavigator = () => {
     }
   };
   if (token === 'loading') return null;
+  const stackName =
+    state.user['custom:role'] === 'customer'
+      ? 'CustomerTabStack'
+      : 'BarberTabStack';
   return (
     <NavigationContainer
       ref={(ref) => NavigationService.setNavigator(ref)}
       onStateChange={onStateChanged}>
       <Stack.Navigator
         headerMode="none"
-        initialRouteName={token.length > 0 ? 'TabStack' : 'AuthStack'}>
+        initialRouteName={token.length > 0 ? stackName : 'AuthStack'}>
         <Stack.Screen name="AuthStack" component={AuthStack} />
-        <Stack.Screen name="TabStack" component={TabStack} />
+        <Stack.Screen name="CustomerTabStack" component={CustomerTabStack} />
+        <Stack.Screen name="BarberTabStack" component={BarberTabStack} />
         <Stack.Screen name="BarberProfile" component={BarberProfile} />
         <Stack.Screen name="Booking" component={BookingScreen} />
         <Stack.Screen name="BookingDate" component={BookingDateScreen} />

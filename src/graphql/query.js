@@ -12,6 +12,20 @@ export const GET_USER = gql`
   }
 `;
 
+export const GET_BARBER = gql`
+  query GetBarber($email: String!) {
+    barbers(where: {email: {_eq: $email}}) {
+      email
+      name
+      id
+      phone
+      avatar
+      title
+      location
+    }
+  }
+`;
+
 export const GET_BARBERS = gql`
   query {
     barbers {

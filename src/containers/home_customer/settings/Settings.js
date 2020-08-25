@@ -1,5 +1,6 @@
 import React from 'react';
 import {Platform} from 'react-native';
+import {Auth} from 'aws-amplify';
 import AsyncStorage from '@react-native-community/async-storage';
 import {H5, H6} from '../../../components/styled/Text';
 import {RootView, BarContent} from '../../../components/styled/View';
@@ -8,6 +9,11 @@ import {dySize} from '../../../utils/responsive';
 import NavigationService from '../../../navigation/NavigationService';
 
 const SettingScreen = () => {
+  onPressLogout = async () => {
+    Auth.signOut();
+    await AsyncStorage.clear();
+    NavigationService.reset('AuthStack');
+  };
   return (
     <RootView justify="flex-start" align="flex-start">
       <BarHeader title={<H5 weight="bold">SETTINGS</H5>} hasBack={false} />
@@ -22,10 +28,7 @@ const SettingScreen = () => {
         <BarItemButton
           text="Log Out"
           icon="logout"
-          onPress={async () => {
-            await AsyncStorage.clear();
-            NavigationService.reset('AuthStack');
-          }}
+          onPress={this.onPressLogout}
         />
         <H6 weight="bold" mt={10}>
           PAYMENT
