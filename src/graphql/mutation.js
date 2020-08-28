@@ -85,7 +85,7 @@ export const UPDATE_BOOK = gql`
   }
 `;
 
-export const ADD_SERVICES = gql`
+export const ADD_BOOK_SERVICES = gql`
   mutation AddBookServices($objects: [book_service_insert_input!]!) {
     insert_book_service(objects: $objects) {
       returning {
@@ -190,6 +190,64 @@ export const ADD_FAVORITE_BARBER = gql`
 export const REMOVE_FAVORITE_BARBER = gql`
   mutation RemoveFavoriteBarber($id: Int!) {
     delete_favorite_barbers(where: {id: {_eq: $id}}) {
+      returning {
+        id
+      }
+    }
+  }
+`;
+
+export const ADD_SERVICE = gql`
+  mutation AddServices(
+    $name: String!
+    $price: Int!
+    $duration: Int!
+    $description: String!
+    $barber_id: String!
+  ) {
+    insert_services(
+      objects: {
+        name: $name
+        price: $price
+        duration: $duration
+        description: $description
+        barber_id: $barber_id
+      }
+    ) {
+      returning {
+        id
+      }
+    }
+  }
+`;
+
+export const UPDATE_SERVICE = gql`
+  mutation UpdateServices(
+    $name: String!
+    $price: Int!
+    $duration: Int!
+    $description: String!
+    $id: Int!
+  ) {
+    update_services(
+      where: {id: {_eq: $id}}
+      _set: {
+        name: $name
+        price: $price
+        duration: $duration
+        description: $description
+      }
+    ) {
+      returning {
+        id
+      }
+    }
+  }
+`;
+
+export const DELETE_SERVICE = gql`
+  mutation UpdateServices($id: Int!) {
+    delete_services(where: {id: {_eq: $id}}) {
       returning {
         id
       }

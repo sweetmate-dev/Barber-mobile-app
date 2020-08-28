@@ -17,6 +17,7 @@ export const BarText = styled.Text`
   margin-right: ${(props) => dySize(props.mr || 0)}px;
   margin-left: ${(props) => dySize(props.ml || 0)}px;
   width: ${(props) => (props.width ? `${dySize(props.width)}px` : 'auto')};
+  line-height: ${(props) => (props.lh ? props.lh + 'px' : 0)};
 `;
 
 export const BarIcon = styled(Icon)`

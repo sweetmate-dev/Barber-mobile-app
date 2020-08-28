@@ -5,6 +5,7 @@ import {Colors} from '../../themes';
 const BarInput = ({errorText = '', ...props}) => {
   return (
     <TextField
+      ref={props.inputRef}
       baseColor={Colors.placeholder}
       error={errorText}
       textColor={Colors.text}

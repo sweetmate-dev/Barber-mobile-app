@@ -26,19 +26,18 @@ import API from '../../../services/api';
 
 const HomeScreen = () => {
   const {state} = useContext(AuthContext);
-
-  if (!state.user.id) return <RootView justify="flex-start"></RootView>;
+  const myId = state.user.id || '';
   const [visibleIndex, setVisibleIndex] = useState(-1); // cut gallaxy visibility
 
-  const MyCuts = useQuery(GET_MY_CUTS, {variables: {user_id: state.user.id}});
+  const MyCuts = useQuery(GET_MY_CUTS, {variables: {user_id: myId}});
   const MyFavoriteBarbers = useQuery(GET_FAVORITE_BARBERS, {
-    variables: {user_id: state.user.id},
+    variables: {user_id: myId},
   });
   const [addCutImage] = useMutation(ADD_CUT, {
     refetchQueries: [
       {
         query: GET_MY_CUTS,
-        variables: {user_id: state.user.id},
+        variables: {user_id: myId},
       },
     ],
     onCompleted: (data) => {
@@ -49,7 +48,7 @@ const HomeScreen = () => {
     refetchQueries: [
       {
         query: GET_MY_CUTS,
-        variables: {user_id: state.user.id},
+        variables: {user_id: myId},
       },
     ],
     onCompleted: (data) => {
@@ -65,12 +64,12 @@ const HomeScreen = () => {
       cropping: true,
     }).then(async (image) => {
       showLoading('Uploading picture...');
-      const fileName = `cuts/${state.user.id}-${new Date().getTime()}`;
+      const fileName = `cuts/${myId}-${new Date().getTime()}`;
       const avatarUrl = await API.fileUploadToS3({
         image: image.path,
         name: fileName,
       });
-      addCutImage({variables: {user_id: state.user.id, image: avatarUrl}});
+      addCutImage({variables: {user_id: myId, image: avatarUrl}});
     });
   };
 

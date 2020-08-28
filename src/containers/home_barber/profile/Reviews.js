@@ -1,14 +1,26 @@
 import React from 'react';
+import {FlatList} from 'react-native-gesture-handler';
 import {H5, H6} from '../../../components/styled/Text';
-import {RootView, BarContent} from '../../../components/styled/View';
+import {RootView, BarContent, BarView} from '../../../components/styled/View';
 import {dySize} from '../../../utils/responsive';
+import {Colors} from '../../../themes';
 
 const BarberReviewScreen = () => {
   return (
     <RootView justify="flex-start" align="flex-start">
-      <BarContent contentContainerStyle={{padding: dySize(10)}}>
-        <H6 weight="bold">Barber Reviews</H6>
-      </BarContent>
+      <FlatList
+        ListEmptyComponent={
+          <BarView align="center" mt={200} width={375}>
+            <H5 weight="bold" color={Colors.placeholder}>
+              You have no reviews yet
+            </H5>
+            <H6 color={Colors.placeholder} align="center">
+              Clients can review your service once they have completed an
+              appointment with you.
+            </H6>
+          </BarView>
+        }
+      />
     </RootView>
   );
 };

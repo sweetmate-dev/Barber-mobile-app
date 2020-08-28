@@ -1,5 +1,5 @@
-import React, {useState, useContext, useEffect} from 'react';
-import {View, Dimensions} from 'react-native';
+import React, {useState, useContext, useRef} from 'react';
+import {View, Dimensions, Animated} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {TabBar, TabView, SceneMap} from 'react-native-tab-view';
 import {useQuery, useMutation} from '@apollo/react-hooks';
@@ -20,13 +20,13 @@ import NavigationService from '../../../navigation/NavigationService';
 const BarberProfileScreen = ({route}) => {
   const {initialIndex} = route.params || {};
   const [index, setIndex] = useState(initialIndex || 0);
+  const headerMargin = useRef(new Animated.Value(0)).current;
   const {state} = useContext(AuthContext);
   const profileResponse = useQuery(GET_BARBER, {
     variables: {email: state.user.email},
   });
   if (profileResponse.loading)
     return <View style={{flex: 1, backgroundColor: Colors.background}} />;
-  console.log(profileResponse.data);
   const barber = profileResponse.data.barbers[0];
 
   // useEffect(async () => {
@@ -34,6 +34,20 @@ const BarberProfileScreen = ({route}) => {
   //   await AsyncStorage.clear();
   //   NavigationService.reset('AuthStack');
   // }, []);
+
+  hideHeader = () => {
+    Animated.timing(headerMargin, {
+      toValue: dySize(-180),
+      duration: 500,
+    }).start();
+  };
+
+  showHeader = () => {
+    Animated.timing(headerMargin, {
+      toValue: dySize(0),
+      duration: 500,
+    }).start();
+  };
 
   const routes = [
     {key: 'info', title: 'INFO'},
@@ -43,7 +57,7 @@ const BarberProfileScreen = ({route}) => {
 
   return (
     <View style={{flex: 1, backgroundColor: Colors.background}}>
-      <BarView align="center">
+      <Animated.View style={{align: 'center', marginTop: headerMargin}}>
         <BarImage
           image={{uri: barber.avatar}}
           width={375}
@@ -70,13 +84,25 @@ const BarberProfileScreen = ({route}) => {
           />
           <H5 weight="bold">{barber.name}</H5>
         </LinearGradient>
-      </BarView>
+      </Animated.View>
       <TabView
         navigationState={{index, routes}}
         renderScene={SceneMap({
-          info: () => <BarberInfoScreen barber={barber} />,
+          info: () => (
+            <BarberInfoScreen
+              barber={barber}
+              onShouldHideHeader={hideHeader}
+              onShouldShowHeader={showHeader}
+            />
+          ),
           reviews: BarberReviewScreen,
-          services: () => <BarberServiceScreen barber={barber} />,
+          services: () => (
+            <BarberServiceScreen
+              barber={barber}
+              onShouldHideHeader={hideHeader}
+              onShouldShowHeader={showHeader}
+            />
+          ),
         })}
         onIndexChange={(i) => setIndex(i)}
         initialLayout={{width: Dimensions.get('window').width}}

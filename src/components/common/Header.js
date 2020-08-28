@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {Header, Left, Body, Right, Icon} from 'native-base';
 import {Colors} from '../../themes';
-import {H4, H5} from '../styled/Text';
+import {H4, H5, H6} from '../styled/Text';
 import {BarView} from '../styled/View';
 import {BarButton} from '../styled/Button';
 import NavigationService from '../../navigation/NavigationService';
@@ -53,6 +53,7 @@ const BarHeader = ({
   hasLeftBadge = false,
   hasRight = false,
   headerIcon,
+  leftText = '',
   rightText = '',
   rightIcon = '',
   leftIcon = 'left',
@@ -69,7 +70,7 @@ const BarHeader = ({
   return (
     <HeaderWrapper style={style}>
       <HeaderLeft>
-        {hasBack && (
+        {hasBack && leftText.length === 0 && (
           <BarButton onPress={() => onPressBack()}>
             <Icon
               type={leftIconType}
@@ -90,6 +91,13 @@ const BarHeader = ({
                 background={Colors.red}
               />
             )}
+          </BarButton>
+        )}
+        {leftText.length > 0 && (
+          <BarButton onPress={() => onPressBack()}>
+            <H6 align="center" pv={1} color={Colors.outline} weight="bold">
+              {leftText}
+            </H6>
           </BarButton>
         )}
       </HeaderLeft>
@@ -113,9 +121,9 @@ const BarHeader = ({
             </H5>
           )}
           {hasRight && rightIcon.length === 0 && rightText.length > 0 && (
-            <H4 align="center" pv={1}>
+            <H6 align="center" pv={1} color={Colors.outline} weight="bold">
               {rightText}
-            </H4>
+            </H6>
           )}
         </BarButton>
       </HeaderRight>

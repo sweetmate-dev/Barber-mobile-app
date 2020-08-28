@@ -15,7 +15,7 @@ import NavigationService from '../../navigation/NavigationService';
 import {
   ADD_BOOK,
   UPDATE_BOOK,
-  ADD_SERVICES,
+  ADD_BOOK_SERVICES,
   UPDATE_SERVICES,
 } from '../../graphql/mutation';
 import {Context as AuthContext} from '../../context/authContext';
@@ -94,7 +94,7 @@ const Booking = ({route}) => {
         service_id: selectedService,
       });
     });
-    addServices({
+    addBookServices({
       variables: {
         objects: param,
       },
@@ -135,7 +135,7 @@ const Booking = ({route}) => {
   const [updateBook] = useMutation(UPDATE_BOOK, {
     onCompleted: onUpdatedBook,
   });
-  const [addServices] = useMutation(ADD_SERVICES, {
+  const [addBookServices] = useMutation(ADD_BOOK_SERVICES, {
     onCompleted: onAddedServices,
   });
   const [updateServices] = useMutation(UPDATE_SERVICES, {
