@@ -47,7 +47,10 @@ export const signIn = (dispatch) => {
         AsyncStorage.setItem('token', idToken.jwtToken);
         AsyncStorage.setItem('user', JSON.stringify(user.attributes));
         hideLoading();
-        NavigationService.navigate('TabStack');
+        const role = user.attributes['custom:role'];
+        NavigationService.navigate(
+          role === 'barber' ? 'BarberTabStack' : 'CustomerTabStack',
+        );
       })
       .catch((err) => {
         console.log({err});
