@@ -10,6 +10,8 @@ const BarInput = ({errorText = '', ...props}) => {
       error={errorText}
       textColor={Colors.text}
       tintColor={Colors.outline}
+      autoCorrect={false}
+      autoCompleteType="off"
       {...props}
     />
   );

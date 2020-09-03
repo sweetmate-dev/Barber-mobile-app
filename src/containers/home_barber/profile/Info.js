@@ -24,8 +24,10 @@ import {
   showLoading,
   hideLoading,
   showConfirmAlert,
+  showAlert,
 } from '../../../services/operators';
 import {FlatList} from 'react-native-gesture-handler';
+import NavigationService from '../../../navigation/NavigationService';
 
 const profileButtons = [
   {
@@ -114,6 +116,10 @@ const BarberInfoScreen = ({onShouldHideHeader, onShouldShowHeader}) => {
   onPressProfileButton = (button) => {
     if (button.title === 'Photos') {
       onPressAddPhoto();
+    } else if (button.title === 'Info') {
+      NavigationService.navigate('EditAccount');
+    } else {
+      showAlert('coming soon');
     }
   };
 

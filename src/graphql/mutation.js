@@ -117,17 +117,22 @@ export const UPDATE_SERVICES = gql`
 `;
 
 export const UPDATE_USER_PROFILE = gql`
-  mutation UpdateProfile(
-    $id: String!
-    $name: String!
-    $email: String!
-    $phone: String!
-    $avatar: String!
-  ) {
-    update_users(
-      where: {id: {_eq: $id}}
-      _set: {name: $name, email: $email, phone: $phone, avatar: $avatar}
-    ) {
+  mutation UpdateProfile($id: String!, $object: users_set_input!) {
+    update_users(where: {id: {_eq: $id}}, _set: $object) {
+      returning {
+        id
+        name
+        email
+        phone
+        avatar
+      }
+    }
+  }
+`;
+
+export const UPDATE_BARBER_PROFILE = gql`
+  mutation UpdateProfile($id: String!, $object: barbers_set_input!) {
+    update_barbers(where: {id: {_eq: $id}}, _set: $object) {
       returning {
         id
         name

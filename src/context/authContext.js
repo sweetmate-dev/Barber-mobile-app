@@ -20,7 +20,10 @@ const authReducer = (state, action) => {
       console.log('Payload: ', action.payload);
       return {
         ...state,
-        user: action.payload,
+        user: {
+          ...state.user,
+          ...action.payload,
+        },
       };
     default:
       return state;

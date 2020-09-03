@@ -7,7 +7,7 @@ import BarberProfileStack from './profile';
 import BarberNotificationStack from './notifications';
 import BarberBookStack from './book';
 import BarberContactStack from './contacts';
-import BarberSettingStack from './settings';
+import SettingStack from '../home_customer/settings';
 import {Colors} from '../../themes';
 import {Context as AuthContext} from '../../context/authContext';
 import {UPDATE_BARBER_ID} from '../../graphql/mutation';
@@ -90,7 +90,7 @@ const BarberTabStack = () => {
       />
       <Tab.Screen
         name="BarberSetting"
-        component={BarberSettingStack}
+        component={SettingStack}
         options={{
           tabBarIcon: ({color}) => (
             <Icon type="AntDesign" name="setting" style={{color}} />

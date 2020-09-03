@@ -10,7 +10,10 @@ import API from '../../services/api';
 
 import {BarButton} from '../../components/styled/Button';
 import {Context as AuthContext} from '../../context/authContext';
-import {UPDATE_USER_PROFILE} from '../../graphql/mutation';
+import {
+  UPDATE_USER_PROFILE,
+  UPDATE_BARBER_PROFILE,
+} from '../../graphql/mutation';
 import {showLoading, hideLoading} from '../../services/operators';
 import NavigationService from '../../navigation/NavigationService';
 
@@ -34,32 +37,48 @@ const EditAccountScreen = () => {
 
   const onPressUpdate = async () => {
     showLoading('Updating profile...');
-    let params = {id: state.user.id, name, email, phone, avatar: image};
+    let params = {
+      id: state.user.id,
+      object: {
+        name,
+        email,
+        phone,
+        avatar: image,
+      },
+    };
     if (image.length > 0 && image.indexOf('https://') < 0) {
       const fileName = 'avatar/' + state.user.id;
       const avatarUrl = await API.fileUploadToS3({
         image,
         name: fileName,
       });
-      params.avatar = avatarUrl;
+      params.object.avatar = avatarUrl;
     }
-    updateProfile({variables: params});
+    console.log(state.user);
+    if (state.user['custom:role'] === 'barber') {
+      updateBarberProfile({variables: params});
+    } else {
+      updateUserProfile({variables: params});
+    }
   };
 
-  const updateCache = (cache, {data}) => {
+  const updateCache = (key) => (cache, {data}) => {
     hideLoading();
     dispatch({
       type: 'saveUser',
       payload: {
         ...state.user,
-        ...data.update_users.returning[0],
+        ...data[key].returning[0],
       },
     });
     NavigationService.goBack();
   };
 
-  const [updateProfile] = useMutation(UPDATE_USER_PROFILE, {
-    update: updateCache,
+  const [updateUserProfile] = useMutation(UPDATE_USER_PROFILE, {
+    update: updateCache('update_users'),
+  });
+  const [updateBarberProfile] = useMutation(UPDATE_BARBER_PROFILE, {
+    update: updateCache('update_barbers'),
   });
 
   return (
