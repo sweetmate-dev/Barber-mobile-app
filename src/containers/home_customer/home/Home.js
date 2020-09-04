@@ -62,14 +62,16 @@ const HomeScreen = () => {
       width: 400,
       height: 400,
       cropping: true,
-    }).then(async (image) => {
+    }).then((image) => {
       showLoading('Uploading picture...');
       const fileName = `cuts/${myId}-${new Date().getTime()}`;
-      const avatarUrl = await API.fileUploadToS3({
-        image: image.path,
-        name: fileName,
-      });
-      addCutImage({variables: {user_id: myId, image: avatarUrl}});
+      setTimeout(async () => {
+        const avatarUrl = await API.fileUploadToS3({
+          image: image.path,
+          name: fileName,
+        });
+        addCutImage({variables: {user_id: myId, image: avatarUrl}});
+      }, 1000);
     });
   };
 

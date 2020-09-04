@@ -45,7 +45,7 @@ const Booking = ({route}) => {
   );
   const {state} = useContext(AuthContext);
   const [additionalInputs, setAdditionalInputs] = useState({});
-  const completed = route.params.completed || false;
+  const status = route.params.status || false;
 
   useEffect(() => {
     let sum = 0;
@@ -161,7 +161,7 @@ const Booking = ({route}) => {
           time: new Date(bookDateTime).toISOString(),
           payment: payMethod,
           barber_id: barber.id,
-          completed: false,
+          status: 0,
         },
       });
     } else {
@@ -173,7 +173,7 @@ const Booking = ({route}) => {
           time: new Date(bookDateTime).toISOString(),
           payment: payMethod,
           barber_id: barber.id,
-          completed: false,
+          status: 0,
         },
       });
     }

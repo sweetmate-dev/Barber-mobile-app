@@ -37,7 +37,7 @@ const UpcomingBookScreen = ({bookings}) => {
       selected: book.book_services.map((i) => i.service.id),
       barber: book.barber,
       paymentMethod: book.paymentMethod,
-      completed: book.completed,
+      status: book.status,
       time: book.time,
       editing: true,
       bookId: book.id,

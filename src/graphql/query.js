@@ -66,7 +66,7 @@ export const GET_MY_BOOKINGS = gql`
       time
       paymentMethod
       barber_id
-      completed
+      status
       barber {
         id
         name
@@ -124,6 +124,33 @@ export const GET_FAVORITE_BARBERS = gql`
         requireState
         requireZipCode
         requireHowFind
+      }
+    }
+  }
+`;
+
+export const GET_BARBER_BOOKINGS = gql`
+  query GetBarberBookings($barber_id: String!) {
+    bookings(where: {barber_id: {_eq: $barber_id}}) {
+      id
+      user {
+        id
+        avatar
+        email
+        name
+        phone
+      }
+      time
+      paymentMethod
+      status
+      book_services {
+        service {
+          id
+          name
+          duration
+          price
+          description
+        }
       }
     }
   }

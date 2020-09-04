@@ -41,7 +41,7 @@ export const ADD_BOOK = gql`
     $time: String!
     $payment: String!
     $barber_id: String!
-    $completed: Boolean!
+    $status: Int!
   ) {
     insert_bookings(
       objects: {
@@ -49,7 +49,7 @@ export const ADD_BOOK = gql`
         time: $time
         paymentMethod: $payment
         barber_id: $barber_id
-        completed: $completed
+        status: $status
       }
     ) {
       returning {
@@ -66,7 +66,7 @@ export const UPDATE_BOOK = gql`
     $time: String!
     $payment: String!
     $barber_id: String!
-    $completed: Boolean!
+    $status: Int!
   ) {
     update_bookings(
       where: {id: {_eq: $book_id}}
@@ -75,7 +75,7 @@ export const UPDATE_BOOK = gql`
         time: $time
         paymentMethod: $payment
         barber_id: $barber_id
-        completed: $completed
+        status: $status
       }
     ) {
       returning {
