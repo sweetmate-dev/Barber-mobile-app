@@ -11,6 +11,7 @@ import {BarHeader, BarImage} from '../../../components/common';
 import {GET_BARBER_BOOKINGS} from '../../../graphql/query';
 import {Context as AuthContext} from '../../../context/authContext';
 import {WaveIndicator} from 'react-native-indicators';
+import {BarButton} from '../../../components/styled/Button';
 
 const pastMonthRange = 2;
 const futureMonthRange = 2;
@@ -19,7 +20,7 @@ const BarberBookScreen = () => {
   const Today = new Date();
   const TodayDateString = moment(Today).format('YYYY-MM-DD');
   const [date, setDate] = useState(TodayDateString);
-  const [books, setBooks] = useState({});
+  const [calendarOpened, setCalendarOpened] = useState(false);
   const {state} = useContext(AuthContext);
   const MyBookings = useQuery(GET_BARBER_BOOKINGS, {
     variables: {barber_id: state.user.id},
@@ -105,6 +106,7 @@ const BarberBookScreen = () => {
           <H5 color={Colors.outline} align="center">
             {moment(date).format('MMMM YYYY')}
           </H5>
+
           <Agenda
             items={generateBookingItems()}
             firstDay={0}
@@ -114,7 +116,7 @@ const BarberBookScreen = () => {
             }}
             // Callback that fires when the calendar is opened or closed
             onCalendarToggled={(calendarOpened) => {
-              console.log(calendarOpened);
+              setCalendarOpened(calendarOpened);
             }}
             // Callback that gets called on day press
             onDayPress={(day) => {
@@ -151,9 +153,19 @@ const BarberBookScreen = () => {
             }}
             // Specify how agenda knob should look like
             // Specify what should be rendered instead of ActivityIndicator
-            // renderEmptyData={() => {
-            //   return <H5>No appointments scheduled</H5>;
-            // }}
+            renderEmptyData={() => {
+              return <H5>No appointments scheduled</H5>;
+            }}
+            renderKnob={() => {
+              return (
+                <BarIcon
+                  type="AntDesign"
+                  name="down"
+                  size={15}
+                  color={Colors.outline}
+                />
+              );
+            }}
             // Specify your item comparison function for increased performance
             rowHasChanged={(r1, r2) => {
               return r1.name !== r2.name;
