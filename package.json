@@ -1,6 +1,10 @@
 {
   "name": "barbapp",
   "version": "0.0.1",
+  "author": {
+    "name": "John Amuesi",
+    "email": "john.amuesi525@gmail.com"
+  },
   "private": true,
   "scripts": {
     "android": "react-native run-android",
